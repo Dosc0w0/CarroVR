@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// keep pos1t1on
+/* // keep pos1t1on
 public class FixChildPosition : MonoBehaviour
 {
     private Vector3 initialWorldPos;
 
-    void Start()
+     void Start()
     {
         transform.position = new Vector3(0.002f, -0.6169f, 0.0534f);
        
@@ -18,7 +18,8 @@ public class FixChildPosition : MonoBehaviour
     {
       transform.position = new Vector3(0.002f, -0.6169f, 0.0534f);
     }
-} // end
+} // end */
+
 
 public class WheelRotator : MonoBehaviour
 {
@@ -66,9 +67,24 @@ public class WheelRotator : MonoBehaviour
 
         switch (rotationAxis)
         {
-            case Axis.X: wheel.localRotation = Quaternion.Euler(currentAngle, 0f, 0f); break;
-            case Axis.Y: wheel.localRotation = Quaternion.Euler(0f, currentAngle, 0f); break;
-            case Axis.Z: wheel.localRotation = Quaternion.Euler(0f, 0f, currentAngle); break;
+            case Axis.X: wheel.localRotation = Quaternion.Euler(25f, 0f, 0f); break;
+            case Axis.Y: wheel.localRotation = Quaternion.Euler(25f, currentAngle, 0f); break;
+            case Axis.Z: wheel.localRotation = Quaternion.Euler(25f, 0f, currentAngle); break;
         }
     }
 }
+
+/*
+public class FixChildRotation : MonoBehaviour
+{
+    // Specify the X-axis angle you want to keep (in degrees, local or world depending on need)
+    [SerializeField]
+    private float fixedXAngle = 0f;
+
+    void LateUpdate()
+    {
+        Vector3 currentEuler = transform.rotation.eulerAngles;
+        // Set only the X component, zero out Y and Z
+        transform.rotation = Quaternion.Euler(fixedXAngle, 0f, 0f);
+    }
+} */

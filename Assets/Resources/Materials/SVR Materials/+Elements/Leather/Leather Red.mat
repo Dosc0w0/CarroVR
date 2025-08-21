@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Leather Red
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_Parent: {fileID: 2100000, guid: 61ea6a0b32d8d26439aaa92f97a906cb, type: 2}
+  m_Parent: {fileID: 2100000, guid: 126ec344dd9e9bd4db27c8e1b0f659b4, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _NORMALMAP
@@ -37,8 +37,10 @@ Material:
     m_Floats:
     - _GlossMapScale: 0.607
     - _Glossiness: 0.696
-    - _Metallic: 0.472
+    - _GlossyReflections: 1
+    - _Metallic: 0
     - _Parallax: 0.0292
+    - _SpecularHighlights: 1
     m_Colors:
     - _Color: {r: 0.8301887, g: 0.121395506, b: 0.23732498, a: 1}
   m_BuildTextureStacks: []

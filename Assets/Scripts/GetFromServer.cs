@@ -45,11 +45,17 @@ public class GetFromServer : MonoBehaviour
             if (wheel)
                 wheel.targetAngle = (dados.Volante * -1);
 
+            if (pedalAcc)
+                pedalAcc.targetAngle = (dados.Acc / 10.0f);
+
+            if (pedalFreio)
+                pedalFreio.targetAngle = (dados.Freio / 10.0f);
+            /*
             if(pedalAcc)
                 pedalAcc.targetZ = (dados.Acc/10.0f);
 
             if (pedalFreio)
-                pedalFreio.targetZ = (dados.Freio/10.0f);
+                pedalFreio.targetZ = (dados.Freio/10.0f); */
         }
     }
 }

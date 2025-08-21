@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2049,7 +2049,7 @@ MonoBehaviour:
       type: 3}
     objectPreview: {fileID: 1027368491}
     objectPreviewTransform: {fileID: 1704093377}
-  - prefabAnchor: {fileID: 7834850231863383217, guid: b52682d8a37af1c46ad784da69f2472f,
+  - prefabAnchor: {fileID: 7834850231863383217, guid: 92be6d85e94c6f6458dd171132d3a49b,
       type: 3}
     objectPreview: {fileID: 1494113175}
     objectPreviewTransform: {fileID: 1494113177}

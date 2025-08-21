@@ -3021,7 +3021,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6794103258008607463}
   m_Layer: 0
-  m_Name: CarPlacement
+  m_Name: AutoPlacement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
