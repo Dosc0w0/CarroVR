@@ -228,9 +228,11 @@ public class CubeCarCameraGuide : MonoBehaviour
 }
 */
 
-/*
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class CubeCarCameraGuide : MonoBehaviour
@@ -252,6 +254,12 @@ public class CubeCarCameraGuide : MonoBehaviour
     [Header("Guiding Axis (initialized once)")]
     public Transform guideAxis;
 
+    [Header("(Clent varables)")]
+    WheelRotator wheelRotator;
+    PedalMover pedalAcc;
+    PedalMover pedalBrk;
+
+
     private float currentSpeed = 0f;
     private float currentTurnSpeed = 0f;
     private bool cameraAligned = false;
@@ -269,9 +277,28 @@ public class CubeCarCameraGuide : MonoBehaviour
             }
         }
 
-        // Handle movement input
-        float moveInput = Input.GetAxisRaw("Vertical");
-        float turnInput = Input.GetAxisRaw("Horizontal");
+        // Quest 3 controller Handle movement input
+        //float moveInput = Input.GetAxisRaw("Vertical");
+
+        // Car controller
+        float moveInput = 0;
+        if (pedalAcc.currentAngle >= (pedalAcc.maxAngle -  pedalAcc.minAngle) / 2)
+        {
+            moveInput = math.remap(pedalAcc.minAngle, pedalAcc.maxAngle,
+                                        0, 1, pedalAcc.currentAngle); ;
+        }
+        else if (pedalBrk.currentAngle >= (pedalBrk.maxAngle - pedalBrk.minAngle) / 2)
+        {
+            moveInput = math.remap(pedalBrk.minAngle, pedalBrk.maxAngle,
+                                        0, -1, pedalBrk.currentAngle); ;
+        }
+
+        // Quest 3 controller
+        //float turnInput = Input.GetAxisRaw("Horizontal");
+
+        // Car Controller
+        float turnInput = math.remap(wheelRotator.mnAngle,wheelRotator.maxAngle,
+                                        -1,1,wheelRotator.currentAngle);
 
         // Speed inertia logic
         if (moveInput != 0f)
@@ -305,8 +332,8 @@ public class CubeCarCameraGuide : MonoBehaviour
         }
     }
 }
-*/
 
+/*
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -389,3 +416,4 @@ public class CubeCarCameraGuide : MonoBehaviour
         }
     }
 }
+*/
