@@ -1855,6 +1855,8 @@ MonoBehaviour:
   angleOffset: 0
   currentAngle: 0
   targetAngle: 0
+  maxAngle: 0
+  mnAngle: 0
 --- !u!1 &5031134630518360570
 GameObject:
   m_ObjectHideFlags: 0

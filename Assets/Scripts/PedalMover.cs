@@ -65,10 +65,11 @@ public class PedalMover : MonoBehaviour
     public float minAngle; // e.g., 0
     public float maxAngle; // e.g., 30
 
+    private float startAngle;
+
     private void Start()
     {
-        //currentAngle = pedal.localEulerAngles.x; // Assuming pedal rotates on X-axis
-
+        startAngle = pedal.localEulerAngles.x; // Assuming pedal rotates on X-axis
 
         // Set pedal on Client
         GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
@@ -104,6 +105,6 @@ public class PedalMover : MonoBehaviour
             currentAngle = Mathf.MoveTowards(currentAngle, targetAngle, maxDegreesPerSecond * Time.deltaTime);
 
         // Apply rotation on the local X-axis
-        pedal.localRotation = Quaternion.Euler(currentAngle, pedal.localEulerAngles.y, pedal.localEulerAngles.z);
+        pedal.localRotation = Quaternion.Euler(startAngle+currentAngle, pedal.localEulerAngles.y, pedal.localEulerAngles.z);
     }
 }

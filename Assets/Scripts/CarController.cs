@@ -255,9 +255,9 @@ public class CubeCarCameraGuide : MonoBehaviour
     public Transform guideAxis;
 
     [Header("(Clent varables)")]
-    WheelRotator wheelRotator;
-    PedalMover pedalAcc;
-    PedalMover pedalBrk;
+    public WheelRotator wheelRotator;
+    public PedalMover pedalAcc;
+    public PedalMover pedalBrk;
 
 
     private float currentSpeed = 0f;
@@ -287,18 +287,32 @@ public class CubeCarCameraGuide : MonoBehaviour
             moveInput = math.remap(pedalAcc.minAngle, pedalAcc.maxAngle,
                                         0, 1, pedalAcc.currentAngle); ;
         }
-        else if (pedalBrk.currentAngle >= (pedalBrk.maxAngle - pedalBrk.minAngle) / 2)
-        {
-            moveInput = math.remap(pedalBrk.minAngle, pedalBrk.maxAngle,
-                                        0, -1, pedalBrk.currentAngle); ;
-        }
+        //else if (pedalBrk.currentAngle >= (pedalBrk.maxAngle - pedalBrk.minAngle) / 2)
+        //{
+        //    moveInput = math.remap(pedalBrk.minAngle, pedalBrk.maxAngle,
+        //                                0, -1, pedalBrk.currentAngle); ;
+        //}
 
         // Quest 3 controller
         //float turnInput = Input.GetAxisRaw("Horizontal");
 
         // Car Controller
-        float turnInput = math.remap(wheelRotator.mnAngle,wheelRotator.maxAngle,
-                                        -1,1,wheelRotator.currentAngle);
+         float turnInput = math.remap(wheelRotator.mnAngle,wheelRotator.maxAngle,
+                                        1,-1,wheelRotator.currentAngle); 
+        /*float turnInput = 0;
+        if (wheelRotator.currentAngle >= (wheelRotator.maxAngle - wheelRotator.mnAngle) / 2)
+        {
+            turnInput = math.remap(pedalAcc.minAngle, pedalAcc.maxAngle,
+                                        0, 1, wheelRotator.currentAngle); ;
+        }
+        else if (wheelRotator.currentAngle >= (wheelRotator.maxAngle - wheelRotator.mnAngle) / 2)
+        {
+            turnInput = math.remap(wheelRotator.mnAngle, wheelRotator.maxAngle,
+                                        0, -1, wheelRotator.currentAngle); ;
+        }*/
+
+        print("turnInput" + turnInput.ToString());
+        print("moveInput" + moveInput.ToString());
 
         // Speed inertia logic
         if (moveInput != 0f)
