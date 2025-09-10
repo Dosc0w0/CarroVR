@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6862061504362896969}
   m_Layer: 0
   m_Name: Acc Pivot
-  m_TagString: AccPedal
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 3354236514297470965}
   - component: {fileID: 7834850231863383217}
   m_Layer: 0
-  m_Name: AutoPrefab
+  m_Name: BackUP - AutoPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1816,7 +1816,7 @@ GameObject:
   - component: {fileID: 1853117262136382466}
   m_Layer: 0
   m_Name: Rotator
-  m_TagString: SteeringWheel
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1851,12 +1851,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheel: {fileID: 3754656718381487085}
   rotationAxis: 2
-  maxDegreesPerSecond: 60
+  maxDegreesPerSecond: 180
   angleOffset: 0
   currentAngle: 0
   targetAngle: 0
-  maxAngle: 540
-  mnAngle: -540
+  maxAngle: 0
+  mnAngle: 0
 --- !u!1 &5031134630518360570
 GameObject:
   m_ObjectHideFlags: 0
@@ -2410,7 +2410,7 @@ GameObject:
   - component: {fileID: 6853755060611784375}
   m_Layer: 0
   m_Name: Brk Pivot
-  m_TagString: BrkPedal
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

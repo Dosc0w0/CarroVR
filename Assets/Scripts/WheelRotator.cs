@@ -133,16 +133,18 @@ public class FixChildPosition : MonoBehaviour
 
     void Reset() { wheel = transform; }
 
-        private void Start()
-        {
-            GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
+    private void Start()
+    {
+        GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
+        //GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
-            if (clients.Length > 0)
-                clients[0].GetComponent<GetFromServer>().wheel = this;
-            print("funfou");
-        }
+        if (clients.Length > 0)
+            clients[0].GetComponent<GetFromServer>().wheel = this;
+        //players[0].GetComponent<CubeCarCameraGuide>().wheelRotator = this;
+        print("funfou");
+    }
 
-        void Update()
+    void Update()
         {
             if (!wheel) return;
             float tgt = targetAngle + angleOffset;
@@ -159,8 +161,10 @@ public class FixChildPosition : MonoBehaviour
                 case Axis.Y: wheel.localRotation = Quaternion.Euler(25f, currentAngle, 0f); break;
                 case Axis.Z: wheel.localRotation = Quaternion.Euler(25f, 0f, currentAngle); break;
             }
-        }
+            Debug.Log("[Steerng Wheel] currentAngle: " + currentAngle.ToString() +
+                ", localRotaton: " + wheel.localRotation.ToString());
     }
+}
 
 
 /*

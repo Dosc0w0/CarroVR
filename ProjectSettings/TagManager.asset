@@ -7,6 +7,9 @@ TagManager:
   - Home
   - CompletedTag
   - Client
+  - SteeringWheel
+  - AccPedal
+  - BrkPedal
   layers:
   - Default
   - TransparentFX

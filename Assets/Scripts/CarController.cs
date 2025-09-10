@@ -263,9 +263,44 @@ public class CubeCarCameraGuide : MonoBehaviour
     private float currentSpeed = 0f;
     private float currentTurnSpeed = 0f;
     private bool cameraAligned = false;
+    private bool initialized = false;
+
+    void TryInitialize()
+    {
+        GameObject[] wheelRotatorObjs = GameObject.FindGameObjectsWithTag("SteeringWheel");
+        GameObject[] pedalAccObjs = GameObject.FindGameObjectsWithTag("AccPedal");
+        GameObject[] pedalBrkObjs = GameObject.FindGameObjectsWithTag("BrkPedal");
+
+        if (wheelRotatorObjs.Length > 0)
+        {
+            wheelRotator = wheelRotatorObjs[0].GetComponent<WheelRotator>();
+        }
+        if (pedalAccObjs.Length > 0)
+        {
+            pedalAcc = pedalAccObjs[0].GetComponent<PedalMover>();
+        }
+        if (pedalBrkObjs.Length > 0)
+        {
+            pedalBrk = pedalBrkObjs[0].GetComponent<PedalMover>();
+        }
+            
+        initialized = wheelRotator != null && pedalAcc != null && pedalBrk != null;
+    }
 
     void Update()
     {
+        //Try to initialize the components
+        if (!initialized)
+        {
+            TryInitialize();
+        }
+
+        // if was not able to initialize, return
+        if (!initialized)
+        {
+            return;
+        }
+
         // Once guideAxis becomes available, align the camera to it—only once
         if (!cameraAligned && guideAxis != null)
         {
@@ -311,39 +346,45 @@ public class CubeCarCameraGuide : MonoBehaviour
                                         0, -1, wheelRotator.currentAngle); ;
         }*/
 
-        print("turnInput" + turnInput.ToString());
-        print("moveInput" + moveInput.ToString());
+        print("turnInput: " + turnInput.ToString() + ", mnAngle " +
+            wheelRotator.mnAngle.ToString() + ", maxAngle: " + wheelRotator.maxAngle.ToString()
+            + ",     currentAngle: " + wheelRotator.currentAngle.ToString());
+        print("moveInput " + moveInput.ToString());
+        // Movement without inertia
+        transform.position += transform.forward * moveInput * maxSpeed * Time.deltaTime; // Direct movement
+        transform.Rotate(0f, turnInput * maxTurnSpeed * Time.deltaTime, 0f, Space.Self); // Direct turning
 
-        // Speed inertia logic
-        if (moveInput != 0f)
-            currentSpeed += moveInput * acceleration * Time.deltaTime;
-        else
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, deceleration * Time.deltaTime);
-        currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed, maxSpeed);
+        //// Speed inertia logic
+        //if (moveInput != 0f)
+        //    currentSpeed += moveInput * acceleration * Time.deltaTime;
+        //else
+        //    currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, deceleration * Time.deltaTime);
+        //currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed, maxSpeed);
 
-        // Steering inertia logic
-        if (turnInput != 0f)
-            currentTurnSpeed += turnInput * turnAcceleration * Time.deltaTime;
-        else
-            currentTurnSpeed = Mathf.MoveTowards(currentTurnSpeed, 0f, turnDeceleration * Time.deltaTime);
-        currentTurnSpeed = Mathf.Clamp(currentTurnSpeed, -maxTurnSpeed, maxTurnSpeed);
+        //// Steering inertia logic
+        //if (turnInput != 0f)
+        //    currentTurnSpeed += turnInput * turnAcceleration * Time.deltaTime;
+        //else
+        //    currentTurnSpeed = Mathf.MoveTowards(currentTurnSpeed, 0f, turnDeceleration * Time.deltaTime);
+        //currentTurnSpeed = Mathf.Clamp(currentTurnSpeed, -maxTurnSpeed, maxTurnSpeed);
 
         // Apply rotation (steering), independent of guide
         transform.Rotate(0f, currentTurnSpeed * Time.deltaTime, 0f, Space.Self);
 
         // Movement—guiding axis used only if it was set to initialize camera
         Vector3 movementDir = transform.forward; // movement no longer depends on guide
-        transform.position += movementDir * currentSpeed * Time.deltaTime;
+                                                 //transform.position += movementDir * currentSpeed * Time.deltaTime;
+
 
         // Bounce logic
-        Vector3 pos = transform.position;
-        if (pos.y < groundY)
-        {
-            pos.y = groundY;
-            currentSpeed *= bounceFactor;
-            currentTurnSpeed *= bounceFactor;
-            transform.position = pos;
-        }
+        //Vector3 pos = transform.position;
+        //if (pos.y < groundY)
+        //{
+        //    pos.y = groundY;
+        //    currentSpeed *= bounceFactor;
+        //    currentTurnSpeed *= bounceFactor;
+        //    transform.position = pos;
+        //}
     }
 }
 
