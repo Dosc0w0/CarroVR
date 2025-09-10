@@ -13,7 +13,7 @@ public class GetFromServer : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating(nameof(CallServer), 0f, 0.333f); // Atualiza a cada 0.1s
+        InvokeRepeating(nameof(CallServer), 0f, 0.1f); // Atualiza a cada 0.1s
     }
 
     void CallServer()
