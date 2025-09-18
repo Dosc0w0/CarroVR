@@ -31,6 +31,8 @@ public class CubeCarCameraGuide : MonoBehaviour
 
     private float currentSpeed = 0f;
     private float currentTurnSpeed = 0f;
+    private float mySpeed = 0f;
+
     private bool cameraAligned = false;
     private bool initialized = false;
 
@@ -54,6 +56,11 @@ public class CubeCarCameraGuide : MonoBehaviour
         }
             
         initialized = wheelRotator != null && pedalAcc != null && pedalBrk != null;
+    }
+
+    public void setInstantSpeed(float speed)
+    {
+        mySpeed = speed;
     }
 
     void Update()
@@ -93,11 +100,13 @@ public class CubeCarCameraGuide : MonoBehaviour
          float turnInput = math.remap(wheelRotator.mnAngle,wheelRotator.maxAngle,
                                         1,-1,wheelRotator.currentAngle); 
      
-        print("moveInput " + moveInput.ToString() + ", mnAngle " +
-            pedalAcc.minAngle.ToString() + ", maxAngle: " + pedalAcc.maxAngle.ToString()
-            + ",     currentAngle: " + pedalAcc.currentAngle.ToString());
+        //print("moveInput " + moveInput.ToString() + ", mnAngle " +
+        //    pedalAcc.minAngle.ToString() + ", maxAngle: " + pedalAcc.maxAngle.ToString()
+        //    + ",     currentAngle: " + pedalAcc.currentAngle.ToString());
         // Movement without inertia
-        transform.position += transform.forward * moveInput * maxSpeed * Time.deltaTime; // Direct movement
+
+        //mySpeed =  moveInput * maxSpeed * Time.deltaTime; // Direct movement
+        transform.position += transform.forward * mySpeed;
         transform.Rotate(0f, turnInput * maxTurnSpeed * Time.deltaTime, 0f, Space.Self); // Direct turning
 
         // Speed inertia logic

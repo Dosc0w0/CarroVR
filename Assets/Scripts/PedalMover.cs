@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 /*
 public class PedalMover : MonoBehaviour
 {
@@ -56,6 +57,9 @@ public class PedalMover : MonoBehaviour
     [Header("Rotation speed (degrees/sec). 0 = snap instantly")]
     public float maxDegreesPerSecond = 0f;
 
+    [Tooltip("Raw data received")]
+    public float raw;
+
     [Tooltip("Current applied rotation (degrees)")]
     public float currentAngle;
 
@@ -86,7 +90,7 @@ public class PedalMover : MonoBehaviour
             }
         }
 
-        print("funfou");
+        //print("funfou");
     }
 
     void Reset() { pedal = transform; }
@@ -94,6 +98,7 @@ public class PedalMover : MonoBehaviour
     void Update()
     {
         if (!pedal) return;
+        targetAngle = (raw / 10.0f);
 
         // Clamp target rotation
         targetAngle = Mathf.Clamp(targetAngle, minAngle, maxAngle);

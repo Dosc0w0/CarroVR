@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 /* // keep pos1t1on
 public class FixChildPosition : MonoBehaviour
@@ -115,6 +116,9 @@ public class FixChildPosition : MonoBehaviour
         [Header("Smoothing (deg/sec). 0 = snap instantly")]
         public float maxDegreesPerSecond = 0f;
 
+        [Tooltip("Raw data received")]
+        public float raw;
+
         [Tooltip("Angle offset added after server value (deg)")]
         public float angleOffset = 0f;
 
@@ -141,12 +145,13 @@ public class FixChildPosition : MonoBehaviour
         if (clients.Length > 0)
             clients[0].GetComponent<GetFromServer>().wheel = this;
         //players[0].GetComponent<CubeCarCameraGuide>().wheelRotator = this;
-        print("funfou");
+        //print("funfou");
     }
-
     void Update()
         {
-            if (!wheel) return;
+        targetAngle = (raw * -1);
+
+        if (!wheel) return;
             float tgt = targetAngle + angleOffset;
 
             if (maxDegreesPerSecond <= 0f)

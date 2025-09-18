@@ -13,7 +13,7 @@ public class GetFromServer : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating(nameof(CallServer), 0f, 0.1f); // Atualiza a cada 0.1s
+        InvokeRepeating(nameof(CallServer), 0f, 0.333f); // Atualiza a cada 0.1s
     }
 
     void CallServer()
@@ -43,13 +43,13 @@ public class GetFromServer : MonoBehaviour
             Debug.Log(pedalFreio);
 
             if (wheel)
-                wheel.targetAngle = (dados.Volante * -1);
+                wheel.raw = dados.Volante;
 
             if (pedalAcc)
-                pedalAcc.targetAngle = (dados.Acc / 10.0f);
+                pedalAcc.raw = dados.Acc;
 
             if (pedalFreio)
-                pedalFreio.targetAngle = (dados.Freio / 10.0f);
+                pedalFreio.raw = dados.Freio;
             /*
             if(pedalAcc)
                 pedalAcc.targetZ = (dados.Acc/10.0f);
