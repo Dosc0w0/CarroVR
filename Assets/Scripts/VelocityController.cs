@@ -1,5 +1,6 @@
-using UnityEngine;
+//using UnityEngine;
 
+/*
 public class VelocityController : MonoBehaviour
 {
     public GetFromServer server;
@@ -93,5 +94,113 @@ public class VelocityController : MonoBehaviour
         print("Acceleration: " + acceleration + " Velocity: " + velocity);
         car.setInstantSpeed(velocity / reduce_transform_factor);
 
+    }
+} */
+
+
+using UnityEngine;
+using UnityEngine.UI;
+
+public class VelocityController : MonoBehaviour
+{
+    public GetFromServer server;
+    public CubeCarCameraGuide car;
+
+    public Text velocityText;      // UI Text to show velocity
+    public Text accelerationText;  // UI Text to show acceleration
+    public Text STAngleText;
+
+    public Transform Rotator;     // will be found at runtime
+
+    private float max_pos_vel = 300f;
+    private float max_neg_vel = -50f;
+
+    private float map_PosAcc_PosVel = 5f;
+    private float map_NegAcc_PosVel = 15f;
+    private float map_PosAcc_NegVel = 5f;
+    private float map_NegAcc_NegVel = 5f;
+
+    private float acceleration = 0f;
+    private float velocity = 0f;
+    private float STAngle = 0f;
+
+    private float drag_coef = 0.2f;
+    private float reduce_transform_factor = 300f;
+
+    private bool initialized = false;
+    private bool disable_draggin = false;
+
+    void TryInitialize()
+    {
+        GameObject[] RotatorObjs = GameObject.FindGameObjectsWithTag("SteeringWheel");
+
+        if (RotatorObjs.Length > 0)
+        {
+            Rotator = RotatorObjs[0].GetComponent<Transform>();
+        }
+        
+        initialized = Rotator != null;
+    }
+
+    void Start()
+    {
+        if (velocityText == null) Debug.LogError("VelocityController: velocityText is not assigned");
+        if (accelerationText == null) Debug.LogError("VelocityController: accelerationText is not assigned");
+        if (STAngleText == null) Debug.LogError("VelocityController: STAngleText is not assigned");
+        if (server == null) Debug.LogError("VelocityController: server is not assigned");
+        if (car == null) Debug.LogError("VelocityController: car is not assigned");
+        if (Rotator == null) Debug.LogError("VelocityController: Rotator Transform is not assigned");
+    }
+
+    void Update()
+    {
+        initialized = server.wheel != null || server.pedalAcc != null || server.pedalFreio != null;
+        if (!initialized) return;
+
+        acceleration = (server.pedalAcc.raw - server.pedalFreio.raw) / 100f;
+
+        if (acceleration > 0f)
+        {
+            if (velocity >= 0f) acceleration *= map_PosAcc_PosVel;
+            else acceleration *= map_PosAcc_NegVel;
+        }
+        else if (acceleration < 0f)
+        {
+            if (velocity <= 0f) acceleration *= map_NegAcc_NegVel;
+            else acceleration *= map_NegAcc_PosVel;
+        }
+
+        if (!disable_draggin)
+        {
+            if (velocity > 0f) velocity = Mathf.Max(0f, velocity - drag_coef * Time.deltaTime);
+            else if (velocity < 0f) velocity = Mathf.Min(0f, velocity + drag_coef * Time.deltaTime);
+        }
+
+        velocity += acceleration * Time.deltaTime;
+
+        if (velocity >= max_pos_vel) velocity = max_pos_vel;
+        else if (velocity <= max_neg_vel) velocity = max_neg_vel;
+
+        car.setInstantSpeed(velocity / reduce_transform_factor);
+
+       // If we have a valid Rotator, read its steering angle
+        if (Rotator != null)
+        {
+            // Example: read local Z-angle
+            STAngle = Rotator.localEulerAngles.z;
+        }
+        else
+        {
+            // Optionally, fallback or debug
+            STAngle = 0f;
+        }
+
+        // Update UI
+        if (velocityText != null)
+            velocityText.text = "Velocity: " + velocity.ToString("F2");
+        if (accelerationText != null)
+            accelerationText.text = "Acceleration: " + acceleration.ToString("F2");
+        if (STAngleText != null)
+            STAngleText.text = "Steering Angle: " + STAngle.ToString("F2");
     }
 }
