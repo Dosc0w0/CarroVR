@@ -1,28 +1,34 @@
-//using UnityEngine;
+using UnityEngine;
 
-/*
 public class VelocityController : MonoBehaviour
 {
+    // Referencias dos outros scripts
     public GetFromServer server;
     public CubeCarCameraGuide car;
 
-    private float max_pos_vel = 300f;
-    private float max_neg_vel = -50f;
+    // Velocidades maximas
+    private const float max_pos_vel = 300f;
+    private const float max_neg_vel = -50f;
 
-    private float map_PosAcc_PosVel = 5;  // (+) Positiva
-    private float map_NegAcc_PosVel = 15; // (-) Negativa
-    private float map_PosAcc_NegVel = 5;  // (+) Positiva
-    private float map_NegAcc_NegVel = 5;  // (-) Negativa
+    // 4 estados de aceleração, vel+ e vel-, acc+ e acc-
+    private const float map_PosAcc_PosVel = 30;  // (+) Positiva
+    private const float map_NegAcc_PosVel = 70;  // (-) Negativa
+    private const float map_PosAcc_NegVel = 30;  // (+) Positiva
+    private const float map_NegAcc_NegVel = 30;  // (-) Negativa
 
+    // Principais variaveis
     private float acceleration = 0.0f;
     private float velocity = 0.0f;
 
-    private float drag_coef = 0.2f;
-
-    private float reduce_transform_factor = 300f;
-
-    private bool initialized = false;
+    // Arrasto, reduzir velocidade com o tempo
+    private const float drag_coef = 0.2f;
     private bool disable_draggin = false;
+
+    // Reduzir numericamente valor de velocidade para unity
+    private const float reduce_transform_factor = 300f;
+
+    // Flag de esperar inicializar
+    private bool initialized = false;
 
     private void Update()
     {
@@ -90,14 +96,14 @@ public class VelocityController : MonoBehaviour
         // ---------------------- Controle de re ---------------------- // TODO
 
         // Calcula nova velocidade instantanea
-        velocity += acceleration * map_PosAcc_PosVel * Time.deltaTime;
+        velocity += acceleration * Time.deltaTime;
         print("Acceleration: " + acceleration + " Velocity: " + velocity);
-        car.setInstantSpeed(velocity / reduce_transform_factor);
+        car.setInstantSpeed(velocity/reduce_transform_factor, velocity, acceleration);
 
     }
-} */
+} 
 
-
+/*
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -204,3 +210,4 @@ public class VelocityController : MonoBehaviour
             STAngleText.text = "Steering Angle: " + STAngle.ToString("F2");
     }
 }
+*/

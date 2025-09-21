@@ -6,19 +6,8 @@ using UnityEngine;
 
 public class CubeCarCameraGuide : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    public float acceleration = 5f;
-    public float maxSpeed = 10f;
-    public float deceleration = 4f;
-
-    [Header("Turn Settings")]
-    public float turnAcceleration = 90f;
-    public float maxTurnSpeed = 120f;
-    public float turnDeceleration = 90f;
-
     [Header("Bounce Settings")]
-    public float bounceFactor = 0.5f;
-    public float groundY = 0f;
+    public const float groundY = 0f;
 
     [Header("Guiding Axis (initialized once)")]
     public Transform guideAxis;
@@ -28,10 +17,13 @@ public class CubeCarCameraGuide : MonoBehaviour
     public PedalMover pedalAcc;
     public PedalMover pedalBrk;
 
+    // Variaveis controladas por VelocityController
+    public float mySpeed = 0f;
+    public float speed_world = 0.0f;
+    public float acceleration_world = 0.0f;
 
-    private float currentSpeed = 0f;
-    private float currentTurnSpeed = 0f;
-    private float mySpeed = 0f;
+    // Variaveis controladas por YawController
+    public float yaw_rate = 0.0f;
 
     private bool cameraAligned = false;
     private bool initialized = false;
@@ -58,9 +50,18 @@ public class CubeCarCameraGuide : MonoBehaviour
         initialized = wheelRotator != null && pedalAcc != null && pedalBrk != null;
     }
 
-    public void setInstantSpeed(float speed)
+    // Função de atualizar velocidade do carro e parametros pro velocimetro
+    public void setInstantSpeed(float speed, float sw, float aw)
     {
         mySpeed = speed;
+        speed_world = sv;
+        acceleration_world = av;
+    }
+    
+    // Função de atualizar o angulo/s de variação do cenario do carro e parametros pro velocimetro
+    public void setYawDifference(float yr)
+    {
+       yaw_rate = yr;
     }
 
     void Update()
@@ -88,56 +89,20 @@ public class CubeCarCameraGuide : MonoBehaviour
             }
         }
 
-        // Car controller
-        float moveInput = 0;
-        if (pedalAcc.currentAngle >= (pedalAcc.maxAngle -  pedalAcc.minAngle) / 2)
-        {
-            moveInput = math.remap(pedalAcc.minAngle, pedalAcc.maxAngle,
-                                        0, 1, pedalAcc.currentAngle); ;
-        }
-
-        // Car Controller
-         float turnInput = math.remap(wheelRotator.mnAngle,wheelRotator.maxAngle,
-                                        1,-1,wheelRotator.currentAngle); 
-     
-        //print("moveInput " + moveInput.ToString() + ", mnAngle " +
-        //    pedalAcc.minAngle.ToString() + ", maxAngle: " + pedalAcc.maxAngle.ToString()
-        //    + ",     currentAngle: " + pedalAcc.currentAngle.ToString());
-        // Movement without inertia
-
-        //mySpeed =  moveInput * maxSpeed * Time.deltaTime; // Direct movement
+        // Aplica a velocidade instatanea do carro     
         transform.position += transform.forward * mySpeed;
-        transform.Rotate(0f, turnInput * maxTurnSpeed * Time.deltaTime, 0f, Space.Self); // Direct turning
 
-        // Speed inertia logic
-        /*if (moveInput != 0f)
-            currentSpeed += moveInput * acceleration * Time.deltaTime;
-        else
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, deceleration * Time.deltaTime);
-        currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed, maxSpeed);*/
-
-       // Steering inertia logic
-       /* if (turnInput != 0f)
-            currentTurnSpeed += turnInput * turnAcceleration * Time.deltaTime; 
-        else
-            currentTurnSpeed = Mathf.MoveTowards(currentTurnSpeed, 0f, turnDeceleration * Time.deltaTime);
-        currentTurnSpeed = Mathf.Clamp(currentTurnSpeed, -maxTurnSpeed, maxTurnSpeed); */
-
-        // Apply rotation (steering), independent of guide
-        transform.Rotate(0f, currentTurnSpeed * Time.deltaTime, 0f, Space.Self);
+        // Aplica a variação do yaw (cenario) instataneo do carro
+        transform.Rotate(0f, yaw_rate, 0f, Space.Self);
 
         // Movement—guiding axis used only if it was set to initialize camera
-        Vector3 movementDir = transform.forward; // movement no longer depends on guide
-                                                 //transform.position += movementDir * currentSpeed * Time.deltaTime;
-
+        Vector3 movementDir = transform.forward;
 
         // Bounce logic
         Vector3 pos = transform.position;
         if (pos.y < groundY)
         {
             pos.y = groundY;
-            currentSpeed = bounceFactor;
-            currentTurnSpeed *= bounceFactor;
             transform.position = pos;
         }
     }

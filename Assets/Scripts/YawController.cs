@@ -35,7 +35,7 @@ public class VelocityController : MonoBehaviour{
         wheel_angle_rad = wheel_angle * Mathf.Deg2Rad;
 
         // Pegar velocidade atual e passar de km/h para m/s
-        speed = car.myspeed / 3.6f;
+        speed = car.speed_velocimeter 3.6f;
 
         // Calcular variação em graus por segundo do cenário
         yaw_ratio = (speed / axis_distance) * Mathf.Tan(wheel_angle_rad);
