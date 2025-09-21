@@ -28,7 +28,7 @@ public class VelocityController : MonoBehaviour
     {
 
         // Esperar incialização de objetos
-        initialized = server.wheel != null || server.pedalAcc != null || server.pedalFreio != null;
+        initialized = server.wheel != null && server.pedalAcc != null && server.pedalFreio != null;
         if(!initialized) return;
 
         // Aceleração efetiva recebida, pedal acc + pedal freio, -100 to 100, -1 to 1.
