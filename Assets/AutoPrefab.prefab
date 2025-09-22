@@ -1901,7 +1901,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheel: {fileID: 3754656718381487085}
   rotationAxis: 2
-  maxDegreesPerSecond: 30
+  maxDegreesPerSecond: 270
   raw: 0
   angleOffset: 0
   currentAngle: 0

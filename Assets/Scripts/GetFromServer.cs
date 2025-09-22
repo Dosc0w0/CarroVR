@@ -34,13 +34,13 @@ public class GetFromServer : MonoBehaviour
         else
         {
             string json = request.downloadHandler.text;
-            Debug.Log("JSON recebido: " + json);
+            //Debug.Log("JSON recebido: " + json);
 
             // Parse do JSON
             VehicleData dados = JsonUtility.FromJson<VehicleData>(json);
             string strData = $"Acelerador: {dados.Acc}, Freio: {dados.Freio}, Volante: {dados.Volante}";
-            Debug.Log(strData);
-            Debug.Log(pedalFreio);
+            //Debug.Log(strData);
+            //Debug.Log(pedalFreio);
 
             if (wheel)
                 wheel.raw = dados.Volante;

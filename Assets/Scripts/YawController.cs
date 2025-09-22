@@ -1,13 +1,16 @@
+using UnityEngine;
+using UnityEngine.UI;
 
-public class VelocityController : MonoBehaviour{
+
+public class YawController : MonoBehaviour{
 
     // Referenciar scripts
     public GetFromServer server;
     public CubeCarCameraGuide car;
 
     // Constantes
-    private const float steering_ratio = 14f;
-    private const float axis_distance = 2f;
+    private const float steering_ratio = 16f;
+    private const float axis_distance = 2.7f;
 
     // Variaveis de entrada
     private float steering_wheel_angle = 0.0f;
@@ -35,10 +38,13 @@ public class VelocityController : MonoBehaviour{
         wheel_angle_rad = wheel_angle * Mathf.Deg2Rad;
 
         // Pegar velocidade atual e passar de km/h para m/s
-        speed = car.speed_velocimeter / 3.6f;
+        speed = car.speed_world / 3.6f;
 
         // Calcular variação em graus por segundo do cenário
         yaw_ratio = (speed / axis_distance) * Mathf.Tan(wheel_angle_rad);
+
+        // yaw par graus
+        yaw_ratio *= Mathf.Rad2Deg;
 
         // Passar a variação de angulo atual para o CarController
         car.setYawDifference(yaw_ratio*Time.deltaTime, yaw_ratio);

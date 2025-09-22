@@ -166,8 +166,8 @@ public class FixChildPosition : MonoBehaviour
                 case Axis.Y: wheel.localRotation = Quaternion.Euler(25f, currentAngle, 0f); break;
                 case Axis.Z: wheel.localRotation = Quaternion.Euler(25f, 0f, currentAngle); break;
             }
-            Debug.Log("[Steerng Wheel] currentAngle: " + currentAngle.ToString() +
-                ", localRotaton: " + wheel.localRotation.ToString());
+            //Debug.Log("[Steerng Wheel] currentAngle: " + currentAngle.ToString() +
+            //    ", localRotaton: " + wheel.localRotation.ToString());
     }
 }
 

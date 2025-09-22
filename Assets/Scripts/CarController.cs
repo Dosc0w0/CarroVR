@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class CubeCarCameraGuide : MonoBehaviour
 {
@@ -28,6 +30,13 @@ public class CubeCarCameraGuide : MonoBehaviour
 
     private bool cameraAligned = false;
     private bool initialized = false;
+
+    // UI
+    public Text velocityText;      // UI Text to show velocity
+    public Text accelerationText;  // UI Text to show acceleration
+    public Text STAngleText;
+
+    public Transform Rotator;     // will be found at runtime
 
     void TryInitialize()
     {
@@ -55,15 +64,15 @@ public class CubeCarCameraGuide : MonoBehaviour
     public void setInstantSpeed(float speed, float sw, float aw)
     {
         mySpeed = speed;
-        speed_world = sv;
-        acceleration_world = av;
+        speed_world = sw;
+        acceleration_world = aw;
     }
 
     // Função de atualizar o angulo/s de variação do cenario do carro e parametros pro velocimetro
     public void setYawDifference(float yr, float yrw)
     {
         yaw_rate = yr;
-        yaw_rate_word = yrw;
+        yaw_rate_world = yrw;
     }
 
     void Update()
@@ -107,5 +116,13 @@ public class CubeCarCameraGuide : MonoBehaviour
             pos.y = groundY;
             transform.position = pos;
         }
+
+        // Update UI
+        if (velocityText != null)
+            velocityText.text = "Velocity: " + speed_world.ToString("F0") + " km/h";
+        if (accelerationText != null)
+            accelerationText.text = "Acceleration: " + acceleration_world.ToString("F0") + " km/h²";
+        if (STAngleText != null)
+            STAngleText.text = "Steering Angle: " + yaw_rate_world.ToString("F0") + "°/s";
     }
 }
