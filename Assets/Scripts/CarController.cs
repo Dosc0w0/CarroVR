@@ -24,6 +24,7 @@ public class CubeCarCameraGuide : MonoBehaviour
 
     // Variaveis controladas por YawController
     public float yaw_rate = 0.0f;
+    public float yaw_rate_world = 0.0f;
 
     private bool cameraAligned = false;
     private bool initialized = false;
@@ -57,11 +58,12 @@ public class CubeCarCameraGuide : MonoBehaviour
         speed_world = sv;
         acceleration_world = av;
     }
-    
+
     // Função de atualizar o angulo/s de variação do cenario do carro e parametros pro velocimetro
-    public void setYawDifference(float yr)
+    public void setYawDifference(float yr, float yrw)
     {
-       yaw_rate = yr;
+        yaw_rate = yr;
+        yaw_rate_word = yrw;
     }
 
     void Update()
