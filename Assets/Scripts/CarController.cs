@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class CubeCarCameraGuide : MonoBehaviour
 {
     [Header("Bounce Settings")]
-    public const float groundY = 0f;
+    public float groundY = 0f;
 
     [Header("Guiding Axis (initialized once)")]
     public Transform guideAxis;
@@ -119,10 +119,10 @@ public class CubeCarCameraGuide : MonoBehaviour
 
         // Update UI
         if (velocityText != null)
-            velocityText.text = "Velocity: " + speed_world.ToString("F0") + " km/h";
+            velocityText.text = "Velocity: " + Mathf.Abs(speed_world).ToString("F10") + " km/h";
         if (accelerationText != null)
-            accelerationText.text = "Acceleration: " + acceleration_world.ToString("F0") + " km/h²";
+            accelerationText.text = "Acceleration: " + acceleration_world.ToString("F10") + " km/h²";
         if (STAngleText != null)
-            STAngleText.text = "Steering Angle: " + yaw_rate_world.ToString("F0") + "°/s";
+            STAngleText.text = "Steering Angle: " + yaw_rate_world.ToString("F0") + "°";
     }
 }

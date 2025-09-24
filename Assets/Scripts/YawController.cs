@@ -47,7 +47,8 @@ public class YawController : MonoBehaviour{
         yaw_ratio *= Mathf.Rad2Deg;
 
         // Passar a variação de angulo atual para o CarController
-        car.setYawDifference(yaw_ratio*Time.deltaTime, yaw_ratio);
+        //car.setYawDifference(yaw_ratio*Time.deltaTime, yaw_ratio);
+        car.setYawDifference(yaw_ratio * Time.deltaTime, steering_wheel_angle);
 
     }
 

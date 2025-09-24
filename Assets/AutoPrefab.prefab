@@ -1901,13 +1901,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheel: {fileID: 3754656718381487085}
   rotationAxis: 2
-  maxDegreesPerSecond: 270
+  maxDegreesPerSecond: 90
   raw: 0
   angleOffset: 0
   currentAngle: 0
   targetAngle: 0
-  maxAngle: 540
-  mnAngle: -540
+  maxAngle: 570
+  mnAngle: -570
 --- !u!1 &5031134630518360570
 GameObject:
   m_ObjectHideFlags: 0
