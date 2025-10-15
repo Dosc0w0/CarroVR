@@ -26,7 +26,7 @@ public class CubeCarCameraGuide : MonoBehaviour
 
     // Variaveis controladas por YawController
     public float yaw_rate = 0.0f;
-    public float yaw_rate_world = 0.0f;
+    public float steering_whel_angle = 0.0f;
 
     private bool cameraAligned = false;
     private bool initialized = false;
@@ -69,10 +69,10 @@ public class CubeCarCameraGuide : MonoBehaviour
     }
 
     // Função de atualizar o angulo/s de variação do cenario do carro e parametros pro velocimetro
-    public void setYawDifference(float yr, float yrw)
+    public void setYawDifference(float yr, float swa)
     {
         yaw_rate = yr;
-        yaw_rate_world = yrw;
+        steering_whel_angle = swa;
     }
 
     void Update()
@@ -119,10 +119,10 @@ public class CubeCarCameraGuide : MonoBehaviour
 
         // Update UI
         if (velocityText != null)
-            velocityText.text = "Velocity: " + Mathf.Abs(speed_world).ToString("F10") + " km/h";
+            velocityText.text = "Speed: " + Mathf.Abs(speed_world).ToString("F0") + " km/h";
         if (accelerationText != null)
-            accelerationText.text = "Acceleration: " + acceleration_world.ToString("F10") + " km/h²";
+            accelerationText.text = "Acceleration: " + acceleration_world.ToString("F0") + " km/h²";
         if (STAngleText != null)
-            STAngleText.text = "Steering Angle: " + yaw_rate_world.ToString("F0") + "°";
+            STAngleText.text = "Steering Angle: " + steering_whel_angle.ToString("F0") + "°";
     }
 }

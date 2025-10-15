@@ -9,7 +9,7 @@ public class YawController : MonoBehaviour{
     public CubeCarCameraGuide car;
 
     // Constantes
-    private const float steering_ratio = 16f;
+    private const float steering_ratio = 18.25f;
     private const float axis_distance = 2.7f;
 
     // Variaveis de entrada

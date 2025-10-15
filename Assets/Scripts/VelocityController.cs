@@ -12,10 +12,10 @@ public class VelocityController : MonoBehaviour
     private const float max_neg_vel = -50f;
 
     // 4 estados de aceleração, vel+ e vel-, acc+ e acc-
-    private const float map_PosAcc_PosVel = 20;  // (+) Positiva
+    private const float map_PosAcc_PosVel = 30;  // (+) Positiva
     private const float map_NegAcc_PosVel = 100;  // (-) Negativa
-    private const float map_PosAcc_NegVel = 20;  // (+) Positiva
-    private const float map_NegAcc_NegVel = 20;  // (-) Negativa
+    private const float map_PosAcc_NegVel = 30;  // (+) Positiva
+    private const float map_NegAcc_NegVel = 30;  // (-) Negativa
 
     // Principais variaveis
     private float acceleration = 0.0f;
@@ -52,7 +52,6 @@ public class VelocityController : MonoBehaviour
         // ------------------ Controle de aceleração ------------------ // FEITO
 
         // Aceleração positiva
-
         if (acceleration > 0){
 
             // Se a velocidade for maior ou igual a 0
@@ -79,6 +78,33 @@ public class VelocityController : MonoBehaviour
                 acceleration *= map_NegAcc_PosVel;
             }
         }
+
+        /*
+        if (velocity > 0)
+        {
+            acceleration = (raw_pedal_acc * map_PosAcc_PosVel - raw_pedal_brake * map_NegAcc_PosVel) / 100;
+        }
+
+        else if (velocity < 0)
+        {
+            acceleration = (raw_pedal_acc * map_NegAcc_NegVel - raw_pedal_brake * map_PosAcc_NegVel) / 100;
+        }
+
+        else if (velocity == 0)
+        {
+
+            if (raw_pedal_acc>0)
+            {
+                acceleration = (raw_pedal_acc * map_PosAcc_PosVel - raw_pedal_brake * map_NegAcc_PosVel) / 100;
+            }
+
+            else if (raw_pedal_brake>0)
+            {
+                acceleration = (raw_pedal_acc * map_NegAcc_NegVel - raw_pedal_brake * map_PosAcc_NegVel) / 100;
+            }
+
+        }
+        */
 
         // ------------------ Controle de velocidade ------------------ // TODO
 
