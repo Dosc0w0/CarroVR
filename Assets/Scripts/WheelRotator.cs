@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-
+using UnityEditor;
+//using static UnityEditor.PlayerSettings;
 /* // keep pos1t1on
 public class FixChildPosition : MonoBehaviour
 {
