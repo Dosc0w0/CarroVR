@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "AR-spatial-anchors.sln"
+    "dotnet.defaultSolution": "CarroVR.sln"
 }
