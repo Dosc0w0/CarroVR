@@ -16,9 +16,7 @@ public class UIController : MonoBehaviour
     public Button exitButton;
 
     // Variables
-    private bool retry = false;
-    private bool sucess = false;
-    private string[] devices;
+    string device2connect = null;
 
     // Plugin Bluetooth
     private AndroidJavaObject plugin_obj;
@@ -57,6 +55,8 @@ public class UIController : MonoBehaviour
             Debug.Log("Rodando no editor");
             PluginStarted = false;
         #endif
+
+        Invoke("start_bluetooth", 3f);
     }
 
     // Botão do controle esquerdo inicia a conexão Bluetooth
@@ -89,8 +89,7 @@ public class UIController : MonoBehaviour
         popup.SetActive(true);
 
         // Chamar plugin
-        //plugin_obj.Call("pluginRefrashMacs");
-        P2W_RefrashMacs();
+        plugin_obj.Call("pluginRefrashMacs");
         
     }
 
@@ -117,9 +116,67 @@ public class UIController : MonoBehaviour
         }
 
         // Construir novos macs
-        string data = message.Replace("DEVICELIST|", "");
-        devices = data.Split(';');
-        
+        foreach(string device in message.Replace("DEVICELIST|", "").Split(';')){
+            if (device2connect.Split('-')[0] == "OBDII"){
+                device2connect = device;
+                break;
+            }
+        }
+
+        // Chamar a funcao de conectar, depois de um tempo
+        feedbackText.text = "A device named OBDII was found.";
+        Invoke(W2P_ConnectDevice, 2f);
     }
+
+    // Chamar conexão com o dispositivo encontrado
+    private void W2P_ConnectDevice(){
+        statusText.text = "Connecting...";
+        plugin_obj.Call("pluginConnectDevice", device2connect);
+    }
+
+    // Conectar a um dispositivo (P -> W)
+    public void P2W_ConnectDevice(string message){
+
+        Debug.Log("Resposta conexão: " + message);
+
+        // Atualiza a UI
+        if(message.StartsWith("SUCCESS")){
+            feedbackText.text = "Connected to OBDII!";
+            Invoke(nameof(W2P_StartConfigELM), 2f);
+
+        }else if(message.StartsWith("ERROR")){
+            feedbackText.color = Color.red;
+            feedbackText.text = "Failed to connect to " + selectedMac + "\n" + message;
+        }
+
+    }
+
+    // Começa a configurar o ELM (W -> P)
+    public void W2P_StartConfigELM(){
+        Debug.Log("Iniciando configurações iniciais do ELM");
+        popupText.color = Color.white;
+        plugin_obj.Call("pluginStartConfigELM");
+    }
+
+    // Começa a configurar o ELM (P -> W)
+    public void P2W_StartConfigELM(string message){
+
+        if(message.StartsWith("SUCCESS|CONFIG_DONE")){
+            feedbackText.text = "Successfully Configured!";
+            Invoke(nameof(W2P_StartContinuousRead), 2f);
+
+        }else if(message.StartsWith("SUCCESS|CMD|")){
+            feedbackText.text = "Configuring ELM...\n\n" + message.Substring("SUCCESS|CMD|".Length);
+
+        }else if(message.StartsWith("ERROR")){
+            feedbackText.color = Color.red;
+            feedbackText.text = message;
+            popupButton.interactable = true;
+
+        }else{
+            feedbackText.text = message;
+        }
+    }
+
 
 }
