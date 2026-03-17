@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class YawController : MonoBehaviour{
 
     // Referenciar scripts
-    public GetFromServer server;
+    public GetFromBluetooth bluetooth;
     public CubeCarCameraGuide car;
 
     // Constantes
@@ -27,11 +27,11 @@ public class YawController : MonoBehaviour{
     private void Update(){
 
         // Esperar incialização de objetos
-        initialized = server.wheel != null && server.pedalAcc != null && server.pedalFreio != null;
+        initialized = bluetooth.wheel != null && bluetooth.pedalAcc != null && bluetooth.pedalFreio != null;
         if(!initialized) return;
 
         // Pega o ângulo do volante
-        steering_wheel_angle = server.wheel.raw;
+        steering_wheel_angle = bluetooth.wheel.raw;
 
         // Calcular ângulo das rodas
         wheel_angle = steering_wheel_angle / steering_ratio;

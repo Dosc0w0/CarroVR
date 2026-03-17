@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
-public class UIController : MonoBehaviour
+public class GetFromBluetooth : MonoBehaviour
 {
     [Header("Canvas")]
     public GameObject popup;
@@ -15,8 +16,14 @@ public class UIController : MonoBehaviour
     public Button retryButton;
     public Button exitButton;
 
+    [Header("Controles")]
+    [SerializeField] public WheelRotator wheel;
+    [SerializeField] public PedalMover pedalAcc;
+    [SerializeField] public PedalMover pedalFreio;
+
     // Variables
     string device2connect = null;
+    bool initialized = false;
 
     // Plugin Bluetooth
     private AndroidJavaObject plugin_obj;
@@ -56,19 +63,21 @@ public class UIController : MonoBehaviour
             PluginStarted = false;
         #endif
 
-        Invoke("start_bluetooth", 3f);
+        retryButton.interactable = false;
+        exitButton.interactable = false;
     }
 
     // Botão do controle esquerdo inicia a conexão Bluetooth
     void Update(){
-        //if (Input.GetKeyDown(KeyCode.JoystickButton2)){
-        //    start_bluetooth();
-        //}
-
-        // Teste pelo teclado
-        if (Input.GetKeyDown(KeyCode.B)){
+        if (OVRInput.GetDown(OVRInput.Button.Four) && !initialized){
+            initialized = true;
             start_bluetooth();
         }
+
+        // Teste pelo teclado
+        //if (Input.GetKeyDown(KeyCode.B)){
+        //    start_bluetooth();
+        //}
     }
 
     // Método para iniciar a conexão Bluetooth
@@ -77,6 +86,7 @@ public class UIController : MonoBehaviour
         // Verificar se o plugin foi iniciado
         if (!PluginStarted){
             Debug.Log("Plugin not started!");
+            feedbackText.text = "Plugin not started!";
             return;
         }
 
@@ -100,11 +110,15 @@ public class UIController : MonoBehaviour
             Debug.Log(message);
             feedbackText.color = Color.red;
             feedbackText.text = message;
+            retryButton.interactable = true;
+            exitButton.interactable = true;
             return;
         }
 
         if (message.StartsWith("NO_PAIRED_DEVICES")){
             Debug.Log("No paireded devices found.");
+            retryButton.interactable = true;
+            exitButton.interactable = true;
             feedbackText.text = message;
             return;
         }
@@ -112,26 +126,44 @@ public class UIController : MonoBehaviour
         if (!message.StartsWith("DEVICELIST|")){
             Debug.Log("Invalid message format.");
             feedbackText.text = "Invalid message format.";
+            retryButton.interactable = true;
+            exitButton.interactable = true;
             return;
         }
 
         // Construir novos macs
         foreach(string device in message.Replace("DEVICELIST|", "").Split(';')){
-            if (device2connect.Split('-')[0] == "OBDII"){
+            if (string.IsNullOrWhiteSpace(device)) continue;
+
+            string[] parts = device.Split('-');
+            if (parts.Length < 2) continue;
+
+            string nome = parts[0];
+
+            if (nome == "OBDII"){
                 device2connect = device;
                 break;
             }
         }
 
+        // Se encontrou varios dispositivos mas nenhum é OBDII
+        if (device2connect == null){
+            feedbackText.color = Color.red;
+            feedbackText.text = "OBDII device NOT found.";
+            retryButton.interactable = true;
+            exitButton.interactable = true;
+            return;
+        }
+
         // Chamar a funcao de conectar, depois de um tempo
-        feedbackText.text = "A device named OBDII was found.";
-        Invoke(W2P_ConnectDevice, 2f);
+        feedbackText.text = "OBDII found!\n" + device2connect;
+        Invoke(nameof(W2P_ConnectDevice), 1.5f);
     }
 
     // Chamar conexão com o dispositivo encontrado
     private void W2P_ConnectDevice(){
         statusText.text = "Connecting...";
-        plugin_obj.Call("pluginConnectDevice", device2connect);
+        plugin_obj.Call("pluginConnectDevice", device2connect.Split('-')[1]);
     }
 
     // Conectar a um dispositivo (P -> W)
@@ -142,11 +174,13 @@ public class UIController : MonoBehaviour
         // Atualiza a UI
         if(message.StartsWith("SUCCESS")){
             feedbackText.text = "Connected to OBDII!";
-            Invoke(nameof(W2P_StartConfigELM), 2f);
+            Invoke(nameof(W2P_StartConfigELM), 1.5f);
 
         }else if(message.StartsWith("ERROR")){
             feedbackText.color = Color.red;
-            feedbackText.text = "Failed to connect to " + selectedMac + "\n" + message;
+            feedbackText.text = "Failed to connect to connect to OBDII.";
+            retryButton.interactable = true;
+            exitButton.interactable = true;
         }
 
     }
@@ -154,7 +188,6 @@ public class UIController : MonoBehaviour
     // Começa a configurar o ELM (W -> P)
     public void W2P_StartConfigELM(){
         Debug.Log("Iniciando configurações iniciais do ELM");
-        popupText.color = Color.white;
         plugin_obj.Call("pluginStartConfigELM");
     }
 
@@ -162,21 +195,71 @@ public class UIController : MonoBehaviour
     public void P2W_StartConfigELM(string message){
 
         if(message.StartsWith("SUCCESS|CONFIG_DONE")){
+            statusText.text = "Read Started!";
             feedbackText.text = "Successfully Configured!";
-            Invoke(nameof(W2P_StartContinuousRead), 2f);
+            Invoke(nameof(W2P_StartContinuousRead), 1.5f);
 
         }else if(message.StartsWith("SUCCESS|CMD|")){
-            feedbackText.text = "Configuring ELM...\n\n" + message.Substring("SUCCESS|CMD|".Length);
+            feedbackText.text = "Config Commands \n\n" + message.Substring("SUCCESS|CMD|".Length);
 
         }else if(message.StartsWith("ERROR")){
             feedbackText.color = Color.red;
             feedbackText.text = message;
-            popupButton.interactable = true;
+            retryButton.interactable = true;
+            exitButton.interactable = true;
 
         }else{
             feedbackText.text = message;
         }
     }
 
+    // Começar leitura contínua do ELM (W -> P)
+    public void W2P_StartContinuousRead(){
+        popup.SetActive(false);
+        plugin_obj.Call("pluginStartContinuousRead");
+    }
 
+    // Começar leitura contínua do ELM (P -> W)
+    public void P2W_StartContinuousRead(string message){
+
+        switch (message[0]){
+            case '1':
+                wheel.raw = float.Parse(message.Substring(1));
+                break;
+
+            case '2':
+                pedalAcc.raw = float.Parse(message.Substring(1));
+                break;
+
+            case '3':
+                pedalFreio.raw = float.Parse(message.Substring(1));
+                break;
+
+            default:
+                feedbackText.text = "ERROR|" + message;
+                retryButton.interactable = true;
+                exitButton.interactable = true;
+                popup.SetActive(true);
+                StartCoroutine(HidePopupAfterDelay(4f));
+                break;
+
+        }
+
+    }
+    IEnumerator HidePopupAfterDelay(float delay){
+        yield return new WaitForSeconds(delay);
+        popup.SetActive(false);
+    }
+
+    // Botão tentar novamente
+    public void retry_button(){
+        initialized = false;
+        device2connect = null;
+        start_bluetooth();
+    }
+
+    // Botão sair    
+    public void exit_button(){
+        popup.SetActive(false);
+    }
 }

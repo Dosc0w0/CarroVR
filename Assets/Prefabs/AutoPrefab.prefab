@@ -2524,7 +2524,8 @@ PrefabInstance:
       value: BYD
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -4770037123299847998, guid: c656929bf09d5b446854f81fd8b267b7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -5382550056509444599, guid: c656929bf09d5b446854f81fd8b267b7,
