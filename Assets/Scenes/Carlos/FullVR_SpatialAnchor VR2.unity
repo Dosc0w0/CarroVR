@@ -262,6 +262,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -250
       objectReference: {fileID: 0}
+    - target: {fileID: 6593365856100073298, guid: b6002415dc9f46f4eb5e5b396391e4be,
+        type: 3}
+      propertyPath: maxDegreesPerSecond
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 8564760365981273816, guid: b6002415dc9f46f4eb5e5b396391e4be,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2371,6 +2376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d33282bb343dc354cb1d37f6ea723f5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  feedbackText: {fileID: 597878820}
   groundY: 2
   guideAxis: {fileID: 8564760365981273816, guid: b6002415dc9f46f4eb5e5b396391e4be,
     type: 3}
@@ -2398,7 +2404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 071672d9c6bf29c4fbb1b10ed73e6e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bluetooth: {fileID: 0}
+  bluetooth: {fileID: 643864291}
   car: {fileID: 757666265}
 --- !u!4 &757666267 stripped
 Transform:
@@ -2418,7 +2424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b966cd74516fbf44ba3c9c9bb420062d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bluetooth: {fileID: 0}
+  bluetooth: {fileID: 643864291}
   car: {fileID: 757666265}
 --- !u!1 &827738541
 GameObject:
@@ -2677,7 +2683,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 868956235}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 438}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2688,7 +2694,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -959.99976, y: 497.99994}
+  m_AnchoredPosition: {x: -1195, y: 497.99994}
   m_SizeDelta: {x: 1920, y: 996}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &868956237

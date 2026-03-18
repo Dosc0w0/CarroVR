@@ -2413,6 +2413,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 26586a5216042954e83be5598e030e64, type: 2}
+    - target: {fileID: -7566842010709751738, guid: c656929bf09d5b446854f81fd8b267b7,
+        type: 3}
+      propertyPath: m_TagString
+      value: SteeringWheel
+      objectReference: {fileID: 0}
+    - target: {fileID: -5382550056509444599, guid: c656929bf09d5b446854f81fd8b267b7,
+        type: 3}
+      propertyPath: m_TagString
+      value: AccPedal
+      objectReference: {fileID: 0}
     - target: {fileID: -3910990755373119420, guid: c656929bf09d5b446854f81fd8b267b7,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -2483,6 +2493,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -3064574548083641161, guid: c656929bf09d5b446854f81fd8b267b7,
+        type: 3}
+      propertyPath: m_TagString
+      value: BrkPedal
+      objectReference: {fileID: 0}
     - target: {fileID: 2724352784368018363, guid: c656929bf09d5b446854f81fd8b267b7,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
@@ -2518,6 +2533,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[7]
       value: 
       objectReference: {fileID: 2100000, guid: 26586a5216042954e83be5598e030e64, type: 2}
+    - target: {fileID: 6720171430929271020, guid: c656929bf09d5b446854f81fd8b267b7,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 8771091787928289351, guid: c656929bf09d5b446854f81fd8b267b7,
         type: 3}
       propertyPath: m_Name

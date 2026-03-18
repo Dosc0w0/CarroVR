@@ -64,6 +64,7 @@ public class CubeCarCameraGuide : MonoBehaviour
     public void setInstantSpeed(float speed, float sw, float aw)
     {
         mySpeed = speed;
+        Debug.Log(mySpeed);
         speed_world = sw;
         acceleration_world = aw;
     }
