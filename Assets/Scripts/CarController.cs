@@ -5,9 +5,9 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class CubeCarCameraGuide : MonoBehaviour
 {
+
     [Header("Bounce Settings")]
     public float groundY = 0f;
 
@@ -120,9 +120,9 @@ public class CubeCarCameraGuide : MonoBehaviour
 
         // Update UI
         if (velocityText != null)
-            velocityText.text = "Velocity: " + Mathf.Abs(speed_world).ToString("F10") + " km/h";
+            velocityText.text = "Speed: " + Mathf.Abs(speed_world).ToString("F0") + " km/h";
         if (accelerationText != null)
-            accelerationText.text = "Acceleration: " + acceleration_world.ToString("F10") + " km/h²";
+            accelerationText.text = "Acceleration: " + acceleration_world.ToString("F1") + " km/h²";
         if (STAngleText != null)
             STAngleText.text = "Steering Angle: " + yaw_rate_world.ToString("F0") + "°";
     }

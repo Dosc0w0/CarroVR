@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Globalization;
 
 public class GetFromBluetooth : MonoBehaviour
 {
@@ -215,7 +216,7 @@ public class GetFromBluetooth : MonoBehaviour
 
     // Começar leitura contínua do ELM (W -> P)
     public void W2P_StartContinuousRead(){
-        //popup.SetActive(false);
+        popup.SetActive(false);
         plugin_obj.Call("pluginStartContinuousRead");
     }
 
@@ -225,17 +226,14 @@ public class GetFromBluetooth : MonoBehaviour
         switch (message[0]){
             case '1':
                 pedalAcc.raw = float.Parse(message.Substring(1));
-                //feedbackText.text = message + " | " + pedalAcc.raw.ToString();
                 break;
 
             case '2':
                 pedalFreio.raw = float.Parse(message.Substring(1));
-                //feedbackText.text = "\n" + message + " | " + pedalFreio.raw.ToString();;
                 break;
 
             case '3':
-                wheel.raw = float.Parse(message.Substring(1));
-                //feedbackText.text = "\n\n" + message + " | " + wheel.raw.ToString();
+                wheel.raw = float.Parse(message.Substring(1), CultureInfo.InvariantCulture);
                 break;
 
             default:
