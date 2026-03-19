@@ -18,5 +18,8 @@ public class CarTelemetryFrame
     // Dados Dinâmicos
     public float CurrentSpeed;
     public float SteeringWheelAngle; // Rotação do volante
-    public float PedalInput;         // Útil para saber se estava acelerando ou solto
+    
+    // --- MUDANÇA AQUI: Pedais separados ---
+    public float AccPedal;   // Valor de 0.0 a 1.0
+    public float BrakePedal; // Valor de 0.0 a 1.0
 }

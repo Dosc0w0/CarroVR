@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class SessionCollector : MonoBehaviour
 {
-    // A nossa "gaveta" de dados da sessão atual
     private SessionData currentSession;
-    
-    // Variável de controle para saber se estamos gravando
     private bool isRecording = false;
+
+    // Variáveis auxiliares para calcular a Velocidade Média sem encher a memória
+    private float speedSum = 0f;
+    private int speedSamplesCount = 0;
 
     private void OnEnable()
     {
-        // Inscrevendo-se nos "gritos" do barramento de eventos
         SimulationEvents.OnSessionStarted += HandleSessionStarted;
         SimulationEvents.OnSessionEnded += HandleSessionEnded;
         SimulationEvents.OnItemCollected += HandleItemCollected;
@@ -20,7 +20,6 @@ public class SessionCollector : MonoBehaviour
 
     private void OnDisable()
     {
-        // Cancelando a inscrição (Boas práticas de Clean Architecture)
         SimulationEvents.OnSessionStarted -= HandleSessionStarted;
         SimulationEvents.OnSessionEnded -= HandleSessionEnded;
         SimulationEvents.OnItemCollected -= HandleItemCollected;
@@ -28,16 +27,15 @@ public class SessionCollector : MonoBehaviour
         SimulationEvents.OnBrakeApplied -= HandleBrakeApplied;
     }
 
-    // ==========================================
-    // HANDLERS (O QUE FAZER QUANDO OUVIR O EVENTO)
-    // ==========================================
-
     private void HandleSessionStarted(string sessionID)
     {
-        // Cria uma nova sessão em branco
         currentSession = new SessionData();
         currentSession.SessionID = sessionID;
         currentSession.StartTime = Time.time;
+        
+        // Zera os contadores de média para a nova sessão
+        speedSum = 0f;
+        speedSamplesCount = 0;
         
         isRecording = true;
         Debug.Log($"[SessionCollector] Iniciando coleta para a sessão {sessionID}");
@@ -49,10 +47,15 @@ public class SessionCollector : MonoBehaviour
 
         currentSession.EndTime = Time.time;
         currentSession.TotalTimeElapsed = currentSession.EndTime - currentSession.StartTime;
-        isRecording = false;
         
-        // Aqui, futuramente, chamaremos o sistema da Fase 4 para salvar o JSON!
-        Debug.Log($"[SessionCollector] Coleta encerrada. Total de itens: {currentSession.TotalItemsCollected}");
+        // Calcula a média exata baseada em todas as amostras recebidas
+        if (speedSamplesCount > 0)
+        {
+            currentSession.AverageSpeed = speedSum / speedSamplesCount;
+        }
+
+        isRecording = false;
+        Debug.Log($"[SessionCollector] Coleta encerrada. Vel. Máx: {currentSession.MaxSpeed:F2} | Vel. Média: {currentSession.AverageSpeed:F2}");
     }
 
     private void HandleItemCollected()
@@ -69,8 +72,30 @@ public class SessionCollector : MonoBehaviour
     {
         if (isRecording) currentSession.BrakeCount++;
     }
+
+    // ==========================================
+    // NOVA FUNÇÃO: CHAMADA PELO TELEMETRY RECORDER
+    // ==========================================
+    public void UpdateDynamics(float currentSpeed, float currentAcceleration)
+    {
+        if (!isRecording) return;
+
+        // 1. Checa os Recordes Máximos
+        if (currentSpeed > currentSession.MaxSpeed)
+        {
+            currentSession.MaxSpeed = currentSpeed;
+        }
+
+        if (currentAcceleration > currentSession.MaxAcceleration)
+        {
+            currentSession.MaxAcceleration = currentAcceleration;
+        }
+
+        // 2. Alimenta a Velocidade Média
+        speedSum += currentSpeed;
+        speedSamplesCount++;
+    }
     
-    // Método público caso outro script precise ler os dados atuais
     public SessionData GetCurrentSessionData()
     {
         return currentSession;

@@ -8,10 +8,15 @@ public class TelemetryReplayer : MonoBehaviour
     [Header("Objetos para Animar (Mock)")]
     public Transform carTransform;
     public Transform headTransform;
+    // --- MUDANÇA 1: Referências para os modelos 3D das mãos do replay ---
+    public Transform leftHandTransform;
+    public Transform rightHandTransform;
 
     [Header("Arquivos de Dados (Arraste os CSVs aqui)")]
-    public TextAsset carCSVFile; // <- MUDANÇA AQUI
-    public TextAsset headCSVFile; // <- MUDANÇA AQUI
+    public TextAsset carCSVFile; 
+    public TextAsset headCSVFile; 
+    // --- MUDANÇA 2: Arquivo CSV das mãos ---
+    public TextAsset handCSVFile; 
 
     [Header("Configurações do Player")]
     public bool playOnStart = false;
@@ -30,6 +35,8 @@ public class TelemetryReplayer : MonoBehaviour
     // Listas de dados
     private List<CarTelemetryFrame> carFrames = new List<CarTelemetryFrame>();
     private List<GazeTelemetryFrame> headFrames = new List<GazeTelemetryFrame>();
+    // --- MUDANÇA 3: Lista de dados das mãos ---
+    private List<HandTelemetryFrame> handFrames = new List<HandTelemetryFrame>();
 
     // Variáveis de Estado do Player
     private bool isDataLoaded = false;
@@ -40,6 +47,8 @@ public class TelemetryReplayer : MonoBehaviour
     // Índices de leitura
     private int currentCarIndex = 0;
     private int currentHeadIndex = 0;
+    // --- MUDANÇA 4: Índice das mãos ---
+    private int currentHandIndex = 0;
 
     void Start()
     {
@@ -51,12 +60,10 @@ public class TelemetryReplayer : MonoBehaviour
 
     void Update()
     {
-        // 1. LER CONTROLES DO USUÁRIO
         HandleInputs();
 
         if (!isDataLoaded) return;
 
-        // 2. CALCULAR A VELOCIDADE DO TEMPO NESTE FRAME
         float currentSpeed = 0f;
         
         if (Input.GetKey(forwardKey))
@@ -72,7 +79,6 @@ public class TelemetryReplayer : MonoBehaviour
             currentSpeed = 1f; 
         }
 
-        // 3. ATUALIZAR A LINHA DO TEMPO VIRTUAL
         if (currentSpeed != 0f)
         {
             currentReplayTime += Time.deltaTime * currentSpeed;
@@ -96,9 +102,10 @@ public class TelemetryReplayer : MonoBehaviour
             }
         }
 
-        // 4. APLICAR AS TRANSFORMAÇÕES AOS OBJETOS
+        // --- MUDANÇA 5: Chamada para atualizar as mãos ---
         UpdateCarTransform();
         UpdateHeadTransform();
+        UpdateHandTransforms();
     }
 
     private void HandleInputs()
@@ -122,13 +129,14 @@ public class TelemetryReplayer : MonoBehaviour
     public void LoadAndPlay()
     {
         ParseData();
-        if (carFrames.Count > 0 || headFrames.Count > 0)
+        if (carFrames.Count > 0 || headFrames.Count > 0 || handFrames.Count > 0)
         {
             isDataLoaded = true;
             isPlaying = true;
             currentReplayTime = 0f;
             currentCarIndex = 0;
             currentHeadIndex = 0;
+            currentHandIndex = 0; // Reseta o índice
             Debug.Log($"<color=green>[Player] Vídeo Carregado! Duração: {maxReplayTime:F2} segundos.</color>");
         }
         else
@@ -195,10 +203,79 @@ public class TelemetryReplayer : MonoBehaviour
         }
     }
 
+    // --- MUDANÇA 6: O Motor de Animação e Visibilidade das Mãos ---
+    private void UpdateHandTransforms()
+    {
+        if (handFrames.Count == 0) return;
+
+        while (currentHandIndex > 0 && handFrames[currentHandIndex].TimeSinceStart > currentReplayTime) currentHandIndex--;
+        while (currentHandIndex < handFrames.Count - 1 && handFrames[currentHandIndex + 1].TimeSinceStart <= currentReplayTime) currentHandIndex++;
+
+        var frame = handFrames[currentHandIndex];
+
+        // Processa a Mão Esquerda
+        if (leftHandTransform != null)
+        {
+            // Se perdeu o rastreio, oculta a mão instantaneamente
+            leftHandTransform.gameObject.SetActive(frame.IsLeftTracked);
+            
+            if (frame.IsLeftTracked)
+            {
+                if (currentHandIndex < handFrames.Count - 1 && handFrames[currentHandIndex + 1].IsLeftTracked)
+                {
+                    var nextFrame = handFrames[currentHandIndex + 1];
+                    float t = (currentReplayTime - frame.TimeSinceStart) / (nextFrame.TimeSinceStart - frame.TimeSinceStart);
+                    
+                    leftHandTransform.position = Vector3.Lerp(
+                        new Vector3(frame.LeftPosX, frame.LeftPosY, frame.LeftPosZ),
+                        new Vector3(nextFrame.LeftPosX, nextFrame.LeftPosY, nextFrame.LeftPosZ), t);
+                        
+                    leftHandTransform.rotation = Quaternion.Slerp(
+                        Quaternion.Euler(frame.LeftRotX, frame.LeftRotY, frame.LeftRotZ),
+                        Quaternion.Euler(nextFrame.LeftRotX, nextFrame.LeftRotY, nextFrame.LeftRotZ), t);
+                }
+                else
+                {
+                    leftHandTransform.position = new Vector3(frame.LeftPosX, frame.LeftPosY, frame.LeftPosZ);
+                    leftHandTransform.rotation = Quaternion.Euler(frame.LeftRotX, frame.LeftRotY, frame.LeftRotZ);
+                }
+            }
+        }
+
+        // Processa a Mão Direita
+        if (rightHandTransform != null)
+        {
+            rightHandTransform.gameObject.SetActive(frame.IsRightTracked);
+            
+            if (frame.IsRightTracked)
+            {
+                if (currentHandIndex < handFrames.Count - 1 && handFrames[currentHandIndex + 1].IsRightTracked)
+                {
+                    var nextFrame = handFrames[currentHandIndex + 1];
+                    float t = (currentReplayTime - frame.TimeSinceStart) / (nextFrame.TimeSinceStart - frame.TimeSinceStart);
+                    
+                    rightHandTransform.position = Vector3.Lerp(
+                        new Vector3(frame.RightPosX, frame.RightPosY, frame.RightPosZ),
+                        new Vector3(nextFrame.RightPosX, nextFrame.RightPosY, nextFrame.RightPosZ), t);
+                        
+                    rightHandTransform.rotation = Quaternion.Slerp(
+                        Quaternion.Euler(frame.RightRotX, frame.RightRotY, frame.RightRotZ),
+                        Quaternion.Euler(nextFrame.RightRotX, nextFrame.RightRotY, nextFrame.RightRotZ), t);
+                }
+                else
+                {
+                    rightHandTransform.position = new Vector3(frame.RightPosX, frame.RightPosY, frame.RightPosZ);
+                    rightHandTransform.rotation = Quaternion.Euler(frame.RightRotX, frame.RightRotY, frame.RightRotZ);
+                }
+            }
+        }
+    }
+
     private void ParseData()
     {
         carFrames.Clear();
         headFrames.Clear();
+        handFrames.Clear(); // Limpa o cache antigo
         maxReplayTime = 0f;
 
         // LÊ O ARQUIVO FÍSICO DO CARRO
@@ -208,7 +285,8 @@ public class TelemetryReplayer : MonoBehaviour
             for (int i = 1; i < lines.Length; i++) 
             {
                 string[] cols = lines[i].Split(',');
-                if (cols.Length >= 7)
+                
+                if (cols.Length >= 11)
                 {
                     CarTelemetryFrame frame = new CarTelemetryFrame
                     {
@@ -218,7 +296,11 @@ public class TelemetryReplayer : MonoBehaviour
                         PositionZ = float.Parse(cols[3], CultureInfo.InvariantCulture),
                         RotationX = float.Parse(cols[4], CultureInfo.InvariantCulture),
                         RotationY = float.Parse(cols[5], CultureInfo.InvariantCulture),
-                        RotationZ = float.Parse(cols[6], CultureInfo.InvariantCulture)
+                        RotationZ = float.Parse(cols[6], CultureInfo.InvariantCulture),
+                        CurrentSpeed = float.Parse(cols[7], CultureInfo.InvariantCulture),
+                        SteeringWheelAngle = float.Parse(cols[8], CultureInfo.InvariantCulture),
+                        AccPedal = float.Parse(cols[9], CultureInfo.InvariantCulture),
+                        BrakePedal = float.Parse(cols[10], CultureInfo.InvariantCulture)
                     };
                     carFrames.Add(frame);
                 }
@@ -249,6 +331,42 @@ public class TelemetryReplayer : MonoBehaviour
                 }
             }
             if (headFrames.Count > 0) maxReplayTime = Mathf.Max(maxReplayTime, headFrames[headFrames.Count - 1].TimeSinceStart);
+        }
+
+        // --- MUDANÇA 7: LÊ O ARQUIVO FÍSICO DAS MÃOS ---
+        if (handCSVFile != null && !string.IsNullOrWhiteSpace(handCSVFile.text))
+        {
+            string[] lines = handCSVFile.text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string[] cols = lines[i].Split(',');
+                // Exigimos as 15 colunas que criamos no DataPersistenceManager
+                if (cols.Length >= 15) 
+                {
+                    HandTelemetryFrame frame = new HandTelemetryFrame
+                    {
+                        TimeSinceStart = float.Parse(cols[0], CultureInfo.InvariantCulture),
+                        // Transforma os "0" e "1" do CSV de volta para booleanos
+                        IsLeftTracked = int.Parse(cols[1], CultureInfo.InvariantCulture) == 1,
+                        LeftPosX = float.Parse(cols[2], CultureInfo.InvariantCulture),
+                        LeftPosY = float.Parse(cols[3], CultureInfo.InvariantCulture),
+                        LeftPosZ = float.Parse(cols[4], CultureInfo.InvariantCulture),
+                        LeftRotX = float.Parse(cols[5], CultureInfo.InvariantCulture),
+                        LeftRotY = float.Parse(cols[6], CultureInfo.InvariantCulture),
+                        LeftRotZ = float.Parse(cols[7], CultureInfo.InvariantCulture),
+                        
+                        IsRightTracked = int.Parse(cols[8], CultureInfo.InvariantCulture) == 1,
+                        RightPosX = float.Parse(cols[9], CultureInfo.InvariantCulture),
+                        RightPosY = float.Parse(cols[10], CultureInfo.InvariantCulture),
+                        RightPosZ = float.Parse(cols[11], CultureInfo.InvariantCulture),
+                        RightRotX = float.Parse(cols[12], CultureInfo.InvariantCulture),
+                        RightRotY = float.Parse(cols[13], CultureInfo.InvariantCulture),
+                        RightRotZ = float.Parse(cols[14], CultureInfo.InvariantCulture)
+                    };
+                    handFrames.Add(frame);
+                }
+            }
+            if (handFrames.Count > 0) maxReplayTime = Mathf.Max(maxReplayTime, handFrames[handFrames.Count - 1].TimeSinceStart);
         }
     }
 }
