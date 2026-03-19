@@ -11810,9 +11810,9 @@ MonoBehaviour:
   headTransform: {fileID: 498970339}
   leftHandTransform: {fileID: 2084665400}
   rightHandTransform: {fileID: 1798631904}
-  carCSVFile: {fileID: 4900000, guid: b59631a1ccd27ac4cabdee209857d680, type: 3}
-  headCSVFile: {fileID: 4900000, guid: b05514a34c575784a845055174147755, type: 3}
-  handCSVFile: {fileID: 4900000, guid: 60de35df41be1f24f9510784441b29d1, type: 3}
+  carCSVFile: {fileID: 4900000, guid: 86faac35d2fe07141b66136dc713d195, type: 3}
+  headCSVFile: {fileID: 4900000, guid: 1c52cdb1027f97246820b6221643e8d6, type: 3}
+  handCSVFile: {fileID: 4900000, guid: e08ef91c808f0d84f82d420a63b7456c, type: 3}
   playOnStart: 0
   loop: 1
   fastForwardSpeed: 1

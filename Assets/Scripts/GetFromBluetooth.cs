@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Globalization;
 
 public class GetFromBluetooth : MonoBehaviour
 {
@@ -220,7 +221,7 @@ public class GetFromBluetooth : MonoBehaviour
                 break;
 
             case '3':
-                wheel.raw = float.Parse(message.Substring(1));
+                wheel.raw = float.Parse(message.Substring(1), CultureInfo.InvariantCulture);
                 break;
 
             default:
