@@ -417,7 +417,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7709402734694079313}
   - {fileID: 7278405123490165092}
   - {fileID: 3754656718381487085}
   - {fileID: 6186177551216663685}
@@ -1040,7 +1039,7 @@ GameObject:
   - component: {fileID: 7278405123490165092}
   - component: {fileID: 2762483246239073357}
   m_Layer: 0
-  m_Name: Road Spawner (1)
+  m_Name: Road Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1806,54 +1805,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &4272021096173824921
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7709402734694079313}
-  - component: {fileID: 1603780696149742073}
-  m_Layer: 0
-  m_Name: Road Spawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &7709402734694079313
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4272021096173824921}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.000045317793, y: -0.027358307, z: 0.0016558317, w: 0.9996244}
-  m_LocalPosition: {x: 0.428, y: -0.985, z: 1.017}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8564760365981273816}
-  m_LocalEulerAnglesHint: {x: 0.01, y: -3.135, z: 0.19}
---- !u!114 &1603780696149742073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4272021096173824921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ac3954a903023b40ae7095c8e6f625c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  segmentPrefab: {fileID: 1639739966255373152, guid: d3d8f6d5642f9414ebc43767cd7bdc3d,
-    type: 3}
-  segmentCount: 1
-  segmentLength: 1
 --- !u!1 &4748203986455468401
 GameObject:
   m_ObjectHideFlags: 0

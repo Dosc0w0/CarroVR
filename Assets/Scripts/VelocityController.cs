@@ -18,9 +18,29 @@ public class VelocityController : MonoBehaviour
     private const float map_NegAcc_NegVel = 20;  // (-) Negativa
 
     // Principais variaveis
-    private float acceleration = 0.0f;
-    private float velocity = 0.0f;
-    private int acc_efi_raw = 0;
+    [SerializeField] private float acceleration = 0.0f;
+    public float Acceleration => acceleration;
+
+    [SerializeField] private float velocity = 0.0f;
+    public float Velocity => velocity;
+
+    [SerializeField] private int acc_efi_raw = 0;
+    public int AccEfiRaw => acc_efi_raw;
+
+    // ==========================================
+    // NOVAS VARIÁVEIS DE TELEMETRIA
+    // ==========================================
+    [Header("Telemetria")]
+    [Tooltip("Zona morta do freio (0 a 100). Ignora peso do pé e trepidação.")]
+    [SerializeField] private int brakeDeadzone = 5;
+    private bool wasBraking = false;
+
+    [SerializeField] private int raw_pedal_acc = 0;
+    public int RawPedalAcc => raw_pedal_acc;
+
+    [SerializeField] private int raw_pedal_brake = 0;
+    public int RawPedalBrake => raw_pedal_brake;
+    // ==========================================
 
     // Arrasto, reduzir velocidade com o tempo
     private const float drag_coef = 0.1f;
@@ -33,8 +53,6 @@ public class VelocityController : MonoBehaviour
     private bool lockReverse = false;
 
     private float increment = 0.0f;
-    private int raw_pedal_acc = 0;
-    private int raw_pedal_brake = 0;
 
     private void Update()
     {
@@ -48,6 +66,20 @@ public class VelocityController : MonoBehaviour
         raw_pedal_brake = (int)server.pedalFreio.raw;
         acc_efi_raw = raw_pedal_acc - raw_pedal_brake;
         acceleration = ((float)acc_efi_raw) / 100;
+
+        // ==========================================
+        // GATILHO DE TELEMETRIA: FREIO (Para o JSON)
+        // ==========================================
+        bool isBrakingNow = raw_pedal_brake > brakeDeadzone; 
+        
+        if (isBrakingNow && !wasBraking)
+        {
+            // O evento dispara apenas 1 vez quando o usuário "pisa"
+            SimulationEvents.TriggerBrakeApplied(raw_pedal_brake / 100f);
+        }
+        
+        wasBraking = isBrakingNow; // Atualiza o estado para o próximo frame
+        // ==========================================
 
         // ------------------ Controle de aceleração ------------------ // FEITO
 

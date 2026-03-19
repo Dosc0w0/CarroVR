@@ -62,9 +62,18 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/FullVR_SpatialAnchor.unity
     guid: 119747366f9dd254a920bd92a0a5012a
-  - enabled: 1
+  - enabled: 0
     path: Assets/V_Road_SpatialAnchor.unity
     guid: e7e847dcae7aa2d45a1dbf7b18318193
+  - enabled: 0
+    path: Assets/Scenes/FullVR_SpatialAnchor MR.unity
+    guid: 181564f35fc27f241841eaf756839931
+  - enabled: 0
+    path: Assets/Scenes/FullVR_SpatialAnchor VR.unity
+    guid: bd03f6245ce5ca24288a62adabfcac5b
+  - enabled: 1
+    path: Assets/Scenes/Teste.unity
+    guid: 256fc5894457f214286fca3e3bc4fe0d
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 8c0030b4b5984e7439a553df0cdd7dd2,
       type: 2}
