@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class VelocityController : MonoBehaviour
 {
     // Referencias dos outros scripts
-    public GetFromServer server;
+    public GetFromBluetooth bluetooth;
     public CubeCarCameraGuide car;
 
     // Velocidades maximas
@@ -58,12 +58,12 @@ public class VelocityController : MonoBehaviour
     {
 
         // Esperar incialização de objetos
-        initialized = server.wheel != null && server.pedalAcc != null && server.pedalFreio != null;
+        initialized = bluetooth.wheel != null && bluetooth.pedalAcc != null && bluetooth.pedalFreio != null;
         if(!initialized) return;
 
         // Aceleração efetiva recebida, pedal acc + pedal freio, -100 to 100, -1 to 1.
-        raw_pedal_acc = (int)server.pedalAcc.raw;
-        raw_pedal_brake = (int)server.pedalFreio.raw;
+        raw_pedal_acc = (int)bluetooth.pedalAcc.raw;
+        raw_pedal_brake = (int)bluetooth.pedalFreio.raw;
         acc_efi_raw = raw_pedal_acc - raw_pedal_brake;
         acceleration = ((float)acc_efi_raw) / 100;
 

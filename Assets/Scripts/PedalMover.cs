@@ -83,11 +83,11 @@ public class PedalMover : MonoBehaviour
         {
             if (pedalName == "Acc")
             {
-                clients[0].GetComponent<GetFromServer>().pedalAcc = this;
+                clients[0].GetComponent<GetFromBluetooth>().pedalAcc = this;
             }
             else if (pedalName == "Brk")
             {
-                clients[0].GetComponent<GetFromServer>().pedalFreio = this;
+                clients[0].GetComponent<GetFromBluetooth>().pedalFreio = this;
             }
         }
 

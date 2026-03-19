@@ -119,7 +119,7 @@ public class FixChildPosition : MonoBehaviour
         [Tooltip("Raw data received")]
         public float raw;
 
-        [Tooltip("Angle offset added after server value (deg)")]
+        [Tooltip("Angle offset added after bluetooth value (deg)")]
         public float angleOffset = 0f;
 
         [Tooltip("Current (applied) angle in degrees")]
@@ -143,7 +143,7 @@ public class FixChildPosition : MonoBehaviour
         //GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
         if (clients.Length > 0)
-            clients[0].GetComponent<GetFromServer>().wheel = this;
+            clients[0].GetComponent<GetFromBluetooth>().wheel = this;
         //players[0].GetComponent<CubeCarCameraGuide>().wheelRotator = this;
         //print("funfou");
     }

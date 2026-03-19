@@ -5,34 +5,27 @@ using UnityEngine;
 public class TelemetryRecorder : MonoBehaviour
 {
     [Header("Referências da Cena (Carro e Cabeça)")]
-    [Tooltip("Arraste o modelo 3D do carro real/virtual aqui")]
+    [Tooltip("Será preenchido automaticamente buscando a tag 'Player'")]
     public Transform carTransform;
     [Tooltip("Arraste a câmara do Quest (CenterEyeAnchor) aqui")]
     public Transform headTransform;
 
     [Header("Referências de Dados do Carro")]
+    [Tooltip("Será preenchido automaticamente")]
     public VelocityController velocityController;
+    [Tooltip("Será preenchido automaticamente buscando a tag 'SteeringWheel'")]
     public WheelRotator wheelRotator;
     public SessionCollector sessionCollector;
 
-    // ==========================================
-    // NOVAS REFERÊNCIAS: HAND TRACKING
-    // ==========================================
     [Header("Referências de Hand Tracking (Quest)")]
-    [Tooltip("Arraste o objeto OVRHand Prefab da Mão Esquerda")]
     public OVRHand leftHand;
-    [Tooltip("Arraste o objeto OVRHand Prefab da Mão Direita")]
     public OVRHand rightHand;
-    // ==========================================
 
     [Header("Configurações de Gravação")]
-    [Tooltip("Quantas vezes por segundo vamos gravar as posições? (10 é um bom padrão)")]
     public float recordRateHz = 10f; 
 
     private List<CarTelemetryFrame> carHistory = new List<CarTelemetryFrame>();
     private List<GazeTelemetryFrame> gazeHistory = new List<GazeTelemetryFrame>();
-    
-    // MUDANÇA: Nossa nova lista para guardar o histórico das mãos
     private List<HandTelemetryFrame> handHistory = new List<HandTelemetryFrame>();
 
     private bool isRecording = false;
@@ -50,11 +43,49 @@ public class TelemetryRecorder : MonoBehaviour
         SimulationEvents.OnSessionEnded -= StopRecording;
     }
 
+    // ==========================================
+    // NOVA FUNÇÃO: BUSCA DINÂMICA DE REFERÊNCIAS
+    // ==========================================
+    private void TryFindCarReferences()
+    {
+        // 1. Busca o Carro pela Tag "Player" (que configuramos no passo dos coletáveis)
+        if (carTransform == null)
+        {
+            GameObject carObj = GameObject.FindGameObjectWithTag("Player");
+            if (carObj != null) carTransform = carObj.transform;
+        }
+
+        // 2. Busca o VelocityController (Como ele é único no carro, FindObjectOfType é muito eficiente)
+        if (velocityController == null)
+        {
+            velocityController = FindObjectOfType<VelocityController>();
+        }
+
+        // 3. Busca o Volante pela Tag que você já usa no seu projeto ("SteeringWheel")
+        if (wheelRotator == null)
+        {
+            GameObject wheelObj = GameObject.FindGameObjectWithTag("SteeringWheel");
+            if (wheelObj != null) wheelRotator = wheelObj.GetComponent<WheelRotator>();
+        }
+
+        if (carTransform == null || velocityController == null || wheelRotator == null)
+        {
+            Debug.LogWarning("[Telemetry] Atenção: Algumas referências do carro não foram encontradas na cena!");
+        }
+        else
+        {
+            Debug.Log("<color=green>[Telemetry] Carro e scripts encontrados dinamicamente com sucesso!</color>");
+        }
+    }
+
     private void StartRecording(string sessionID)
     {
+        // MUDANÇA AQUI: Tenta achar o carro instanciado antes de começar a gravar
+        TryFindCarReferences();
+
         carHistory.Clear();
         gazeHistory.Clear();
-        handHistory.Clear(); // Limpa o cache antigo das mãos
+        handHistory.Clear();
         
         sessionStartTime = Time.time;
         isRecording = true;
@@ -66,7 +97,6 @@ public class TelemetryRecorder : MonoBehaviour
     {
         isRecording = false;
         StopAllCoroutines();
-        // Atualizei o log para mostrar os frames capturados das mãos também
         Debug.Log($"[Telemetry] Gravação parada. Carro: {carHistory.Count} | Cabeça: {gazeHistory.Count} | Mãos: {handHistory.Count}");
     }
 
@@ -128,9 +158,7 @@ public class TelemetryRecorder : MonoBehaviour
                 gazeHistory.Add(gazeFrame);
             }
 
-            // ==========================================
-            // 3. FOTOGRAFIA DAS MÃOS (Hand Tracking)
-            // ==========================================
+            // 3. FOTOGRAFIA DAS MÃOS
             bool isLeftTracked = leftHand != null && leftHand.IsTracked;
             bool isRightTracked = rightHand != null && rightHand.IsTracked;
 
@@ -138,7 +166,6 @@ public class TelemetryRecorder : MonoBehaviour
             {
                 TimeSinceStart = currentTimeSinceStart,
                 
-                // Mão Esquerda (Se não estiver rastreada, salva a posição como zero)
                 IsLeftTracked = isLeftTracked,
                 LeftPosX = isLeftTracked ? leftHand.transform.position.x : 0f,
                 LeftPosY = isLeftTracked ? leftHand.transform.position.y : 0f,
@@ -147,7 +174,6 @@ public class TelemetryRecorder : MonoBehaviour
                 LeftRotY = isLeftTracked ? leftHand.transform.eulerAngles.y : 0f,
                 LeftRotZ = isLeftTracked ? leftHand.transform.eulerAngles.z : 0f,
 
-                // Mão Direita (Se não estiver rastreada, salva a posição como zero)
                 IsRightTracked = isRightTracked,
                 RightPosX = isRightTracked ? rightHand.transform.position.x : 0f,
                 RightPosY = isRightTracked ? rightHand.transform.position.y : 0f,
@@ -157,7 +183,6 @@ public class TelemetryRecorder : MonoBehaviour
                 RightRotZ = isRightTracked ? rightHand.transform.eulerAngles.z : 0f
             };
             handHistory.Add(handFrame);
-            // ==========================================
 
             yield return waitInstruction;
         }
@@ -165,7 +190,5 @@ public class TelemetryRecorder : MonoBehaviour
 
     public List<CarTelemetryFrame> GetCarHistory() { return carHistory; }
     public List<GazeTelemetryFrame> GetGazeHistory() { return gazeHistory; }
-    
-    // MUDANÇA: Método para o DataPersistenceManager puxar os dados e salvar no CSV
     public List<HandTelemetryFrame> GetHandHistory() { return handHistory; }
 }
