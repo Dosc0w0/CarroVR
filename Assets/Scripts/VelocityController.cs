@@ -4,18 +4,26 @@ using UnityEngine.UI;
 public class VelocityController : MonoBehaviour
 {
     // Referencias dos outros scripts
+    [SerializeField] 
     public GetFromBluetooth bluetooth;
+    [SerializeField] 
     public CubeCarCameraGuide car;
 
     // Velocidades maximas
-    private const float max_pos_vel = 300f;
-    private const float max_neg_vel = -50f;
+    [SerializeField]
+    public const float max_pos_vel = 60f;
+    [SerializeField]
+    public const float max_neg_vel = -50f; 
 
     // 4 estados de aceleração, vel+ e vel-, acc+ e acc-
-    private const float map_PosAcc_PosVel = 20;  // (+) Positiva
-    private const float map_NegAcc_PosVel = 100;  // (-) Negativa
-    private const float map_PosAcc_NegVel = 20;  // (+) Positiva
-    private const float map_NegAcc_NegVel = 20;  // (-) Negativa
+    [SerializeField] 
+    public const float map_PosAcc_PosVel = 10;  // (+) Positiva
+    [SerializeField] 
+    public const float map_NegAcc_PosVel = 50;  // (-) Negativa
+    [SerializeField] 
+    public const float map_PosAcc_NegVel = 10;  // (+) Positiva
+    [SerializeField] 
+    public const float map_NegAcc_NegVel = 10;  // (-) Negativa
 
     // Principais variaveis
     [SerializeField] private float acceleration = 0.0f;

@@ -51,7 +51,7 @@ public class TelemetryRecorder : MonoBehaviour
         // 1. Busca o Carro pela Tag "Player" (que configuramos no passo dos coletáveis)
         if (carTransform == null)
         {
-            GameObject carObj = GameObject.FindGameObjectWithTag("Player");
+            GameObject carObj = GameObject.FindGameObjectWithTag("Car");
             if (carObj != null) carTransform = carObj.transform;
         }
 

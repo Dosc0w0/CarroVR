@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44eb8616c681b94ab273034088ff74a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collectorTag: Player
+  collectorTag: Car
 --- !u!1001 &2175388344187330426
 PrefabInstance:
   m_ObjectHideFlags: 0
