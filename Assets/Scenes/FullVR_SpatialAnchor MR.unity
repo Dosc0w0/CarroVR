@@ -2129,7 +2129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 071672d9c6bf29c4fbb1b10ed73e6e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bluetooth: {fileID: 0}
+  bluetooth: {fileID: 643864291}
   car: {fileID: 757666265}
   acceleration: 0
   velocity: 0
@@ -2155,7 +2155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b966cd74516fbf44ba3c9c9bb420062d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bluetooth: {fileID: 0}
+  bluetooth: {fileID: 643864291}
   car: {fileID: 757666265}
 --- !u!1 &761215494
 GameObject:
@@ -2560,7 +2560,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -959.99976, y: 497.99994}
-  m_SizeDelta: {x: 1520, y: 996}
+  m_SizeDelta: {x: 1020, y: 996}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &868956237
 MonoBehaviour:
@@ -5811,7 +5811,7 @@ MonoBehaviour:
   headTransform: {fileID: 728659925}
   velocityController: {fileID: 757666266}
   wheelRotator: {fileID: 0}
-  sessionCollector: {fileID: 0}
+  sessionCollector: {fileID: 2025794026}
   leftHand: {fileID: 2113756608}
   rightHand: {fileID: 1168550729}
   recordRateHz: 10
@@ -6447,7 +6447,7 @@ RectTransform:
   m_GameObject: {fileID: 2072764956}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0003, y: 0.0003, z: 0.0003}
+  m_LocalScale: {x: 0.0008, y: 0.0008, z: 0.0008}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1752423892}

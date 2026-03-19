@@ -18,7 +18,7 @@ public class SessionControllerVR : MonoBehaviour
     void Update()
     {
         // Verifica se o botão escolhido foi pressionado no controle ESQUERDO (LTouch)
-        if (OVRInput.GetDown(toggleSessionButton, OVRInput.Controller.LTouch))
+        if (OVRInput.GetDown(toggleSessionButton))
         {
             ToggleSession();
         }

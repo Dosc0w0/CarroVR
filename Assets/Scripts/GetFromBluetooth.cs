@@ -59,7 +59,6 @@ public class GetFromBluetooth : MonoBehaviour
             PluginStarted = false;
         #endif
 
-        running = true;
     }
 
     // Botão do controle esquerdo inicia a conexão Bluetooth
@@ -78,6 +77,9 @@ public class GetFromBluetooth : MonoBehaviour
     // Método para iniciar a conexão Bluetooth
     private void start_bluetooth(){
         
+        // Ativar popup
+        popup.SetActive(true);
+
         // Verificar se o plugin foi iniciado
         if (!PluginStarted){
             Debug.Log("Plugin not started!");
@@ -89,9 +91,6 @@ public class GetFromBluetooth : MonoBehaviour
         Debug.Log("Iniciando conexão Bluetooth...");        
         statusText.text = "Searching...";
         feedbackText.text = "";
-
-        // Ativar popup
-        popup.SetActive(true);
 
         // Chamar plugin
         plugin_obj.Call("pluginRefrashMacs");
