@@ -5,9 +5,14 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class CollectibleItem : MonoBehaviour
 {
-    [Header("Configurações")]
+    [Header("Configurações do Coletável")]
     [Tooltip("Tag do objeto que pode coletar este item (o carro)")]
     public string collectorTag = "Player";
+
+    // --- NOVA VARIÁVEL: BIFURCAÇÃO DE LÓGICA ---
+    [Header("Modo de Gatilho")]
+    [Tooltip("Se ativado, este item NÃO soma pontos. Ele serve apenas como a linha de partida para o teste oficial.")]
+    [SerializeField] private bool isOfficialStartLine = false;
 
     private MeshRenderer meshRenderer;
     private Collider itemCollider;
@@ -43,8 +48,20 @@ public class CollectibleItem : MonoBehaviour
     {
         isCollected = true;
 
-        // 1. Dispara o evento global. O SessionCollector vai ouvir isto e somar +1 no JSON.
-        SimulationEvents.TriggerItemCollected();
+        // ==========================================
+        // A MÁGICA DOS DOIS PORTÕES (TWO GATES)
+        // ==========================================
+        if (isOfficialStartLine)
+        {
+            // É a linha de partida oficial! Grita o novo evento.
+            SimulationEvents.TriggerOfficialTrackStarted();
+        }
+        else
+        {
+            // É um item normal. Soma um ponto no placar.
+            SimulationEvents.TriggerItemCollected();
+        }
+        // ==========================================
 
         // 2. Esconde o objeto visualmente (para parecer que sumiu)
         if (meshRenderer != null) 
@@ -59,12 +76,12 @@ public class CollectibleItem : MonoBehaviour
         if (audioSource != null && audioSource.clip != null)
         {
             audioSource.Play();
-            // A mágica: Destrói o objeto apenas após os segundos de duração do áudio
+            // Destrói o objeto apenas após os segundos de duração do áudio
             Destroy(gameObject, audioSource.clip.length);
         }
         else
         {
-            // Fallback: se você esquecer de colocar um som, ele destrói imediatamente
+            // Fallback: se esquecer de colocar um som, ele destrói imediatamente
             Destroy(gameObject);
         }
     }

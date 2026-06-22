@@ -64,12 +64,12 @@ public class DataPersistenceManager : MonoBehaviour
 
         StringBuilder sb = new StringBuilder();
         
-        sb.AppendLine("TimeSinceStart,PosX,PosY,PosZ,RotX,RotY,RotZ,CurrentSpeed,SteeringAngle,AccPedal,BrakePedal");
+        sb.AppendLine("TimeSinceStart,TrackPhase,PosX,PosY,PosZ,RotX,RotY,RotZ,CurrentSpeed,SteeringAngle,AccPedal,BrakePedal");
 
         foreach (var frame in history)
         {
-            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}", 
-                frame.TimeSinceStart, frame.PositionX, frame.PositionY, frame.PositionZ, 
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", 
+                frame.TimeSinceStart, frame.TrackPhase, frame.PositionX, frame.PositionY, frame.PositionZ, 
                 frame.RotationX, frame.RotationY, frame.RotationZ, frame.CurrentSpeed, 
                 frame.SteeringWheelAngle, frame.AccPedal, frame.BrakePedal));
         }

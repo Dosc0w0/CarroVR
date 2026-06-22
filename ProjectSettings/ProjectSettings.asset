@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Voxar
-  productName: "CarroVR Vers\xE3o VR"
+  productName: CarroVR Oficial
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -142,6 +142,8 @@ PlayerSettings:
   bundleVersion: 1.1
   preloadedAssets:
   - {fileID: 11400000, guid: 98fabcbcca0886f45ad5205e84216e81, type: 2}
+  - {fileID: 11400000, guid: 8c0030b4b5984e7439a553df0cdd7dd2, type: 2}
+  - {fileID: -2547559607972768095, guid: abe5d4c6390c70b438750d3c82121457, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -162,7 +164,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.CarTestV.SpatiaAnchorsMR
+    Android: com.CarTestV.SpatiaAnchorsOficial
     Standalone: com.samples.startersamples
   buildNumber:
     Standalone: 0
@@ -284,7 +286,14 @@ PlayerSettings:
   AndroidMinifyDebug: 0
   AndroidValidateAppBundleSize: 1
   AndroidAppBundleSizeToValidate: 150
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 2800000, guid: 1690c24ddb820854990563e51c909a90, type: 3}
+      m_Width: 128
+      m_Height: 128
+      m_Kind: 0
   m_BuildTargetPlatformIcons:
   - m_BuildTarget: Android
     m_Icons:

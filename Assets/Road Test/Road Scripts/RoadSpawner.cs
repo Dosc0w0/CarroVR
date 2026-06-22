@@ -14,9 +14,9 @@ public class RoadSpawner : MonoBehaviour
         for (int i = 0; i < segmentCount; i++)
         {
             Vector3 pos = Vector3.forward * i * segmentLength;
-            var seg = Instantiate(segmentPrefab, pos, Quaternion.identity);
+            var seg = Instantiate(segmentPrefab, this.transform.position, Quaternion.identity);
             segments.Add(seg);
-        }
+        } 
     }
 
     public void SpawnNext()
@@ -24,7 +24,7 @@ public class RoadSpawner : MonoBehaviour
         // Spawn new segment at the end
         var last = segments[segments.Count - 1];
         Vector3 newPos = last.transform.position + Vector3.forward * segmentLength;
-        var seg = Instantiate(segmentPrefab, newPos, Quaternion.identity);
+        var seg = Instantiate(segmentPrefab, this.transform.position, Quaternion.identity);
         segments.Add(seg);
 
         // Destroy the oldest behind the camera

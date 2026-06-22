@@ -291,16 +291,16 @@ public class TelemetryReplayer : MonoBehaviour
                     CarTelemetryFrame frame = new CarTelemetryFrame
                     {
                         TimeSinceStart = float.Parse(cols[0], CultureInfo.InvariantCulture),
-                        PositionX = float.Parse(cols[1], CultureInfo.InvariantCulture),
-                        PositionY = float.Parse(cols[2], CultureInfo.InvariantCulture),
-                        PositionZ = float.Parse(cols[3], CultureInfo.InvariantCulture),
-                        RotationX = float.Parse(cols[4], CultureInfo.InvariantCulture),
-                        RotationY = float.Parse(cols[5], CultureInfo.InvariantCulture),
-                        RotationZ = float.Parse(cols[6], CultureInfo.InvariantCulture),
-                        CurrentSpeed = float.Parse(cols[7], CultureInfo.InvariantCulture),
-                        SteeringWheelAngle = float.Parse(cols[8], CultureInfo.InvariantCulture),
-                        AccPedal = float.Parse(cols[9], CultureInfo.InvariantCulture),
-                        BrakePedal = float.Parse(cols[10], CultureInfo.InvariantCulture)
+                        PositionX = float.Parse(cols[2], CultureInfo.InvariantCulture),
+                        PositionY = float.Parse(cols[3], CultureInfo.InvariantCulture),
+                        PositionZ = float.Parse(cols[4], CultureInfo.InvariantCulture),
+                        RotationX = float.Parse(cols[5], CultureInfo.InvariantCulture),
+                        RotationY = float.Parse(cols[6], CultureInfo.InvariantCulture),
+                        RotationZ = float.Parse(cols[7], CultureInfo.InvariantCulture),
+                        CurrentSpeed = float.Parse(cols[8], CultureInfo.InvariantCulture),
+                        SteeringWheelAngle = float.Parse(cols[9], CultureInfo.InvariantCulture),
+                        AccPedal = float.Parse(cols[10], CultureInfo.InvariantCulture),
+                        BrakePedal = float.Parse(cols[11], CultureInfo.InvariantCulture)
                     };
                     carFrames.Add(frame);
                 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class TelemetryRecorder : MonoBehaviour
 {
     [Header("Referências da Cena (Carro e Cabeça)")]
-    [Tooltip("Será preenchido automaticamente buscando a tag 'Player'")]
+    [Tooltip("Será preenchido automaticamente buscando a tag 'Car'")]
     public Transform carTransform;
     [Tooltip("Arraste a câmara do Quest (CenterEyeAnchor) aqui")]
     public Transform headTransform;
@@ -30,38 +30,49 @@ public class TelemetryRecorder : MonoBehaviour
 
     private bool isRecording = false;
     private float sessionStartTime = 0f;
+    
+    // --- NOVA VARIÁVEL: FASE ATUAL ---
+    private int currentTrackPhase = 0;
 
     private void OnEnable()
     {
         SimulationEvents.OnSessionStarted += StartRecording;
         SimulationEvents.OnSessionEnded += StopRecording;
+        
+        // --- NOVA ASSINATURA: Escuta a mudança de fase ---
+        SimulationEvents.OnOfficialTrackStarted += HandleOfficialTrackStarted;
     }
 
     private void OnDisable()
     {
         SimulationEvents.OnSessionStarted -= StartRecording;
         SimulationEvents.OnSessionEnded -= StopRecording;
+        
+        SimulationEvents.OnOfficialTrackStarted -= HandleOfficialTrackStarted;
     }
 
     // ==========================================
-    // NOVA FUNÇÃO: BUSCA DINÂMICA DE REFERÊNCIAS
+    // NOVA FUNÇÃO: MUDA A FASE PARA 1
     // ==========================================
+    private void HandleOfficialTrackStarted()
+    {
+        currentTrackPhase = 1;
+        Debug.Log("<color=magenta>[Telemetry] Gravador atualizado para Fase Oficial (TrackPhase = 1)</color>");
+    }
+
     private void TryFindCarReferences()
     {
-        // 1. Busca o Carro pela Tag "Player" (que configuramos no passo dos coletáveis)
         if (carTransform == null)
         {
             GameObject carObj = GameObject.FindGameObjectWithTag("Car");
             if (carObj != null) carTransform = carObj.transform;
         }
 
-        // 2. Busca o VelocityController (Como ele é único no carro, FindObjectOfType é muito eficiente)
         if (velocityController == null)
         {
             velocityController = FindObjectOfType<VelocityController>();
         }
 
-        // 3. Busca o Volante pela Tag que você já usa no seu projeto ("SteeringWheel")
         if (wheelRotator == null)
         {
             GameObject wheelObj = GameObject.FindGameObjectWithTag("SteeringWheel");
@@ -80,7 +91,6 @@ public class TelemetryRecorder : MonoBehaviour
 
     private void StartRecording(string sessionID)
     {
-        // MUDANÇA AQUI: Tenta achar o carro instanciado antes de começar a gravar
         TryFindCarReferences();
 
         carHistory.Clear();
@@ -89,6 +99,7 @@ public class TelemetryRecorder : MonoBehaviour
         
         sessionStartTime = Time.time;
         isRecording = true;
+        currentTrackPhase = 0; // Garante que a fase reseta para 0 ao iniciar uma nova sessão
 
         StartCoroutine(RecordRoutine());
     }
@@ -109,7 +120,6 @@ public class TelemetryRecorder : MonoBehaviour
         {
             float currentTimeSinceStart = Time.time - sessionStartTime;
 
-            // --- CAPTURA DOS DADOS DINÂMICOS DO CARRO ---
             float currentVel = velocityController != null ? velocityController.Velocity : 0f;
             float currentAcc = velocityController != null ? velocityController.Acceleration : 0f;
             float steerAngle = wheelRotator != null ? wheelRotator.currentAngle : 0f; 
@@ -128,6 +138,10 @@ public class TelemetryRecorder : MonoBehaviour
                 CarTelemetryFrame carFrame = new CarTelemetryFrame
                 {
                     TimeSinceStart = currentTimeSinceStart,
+                    
+                    // --- MUDANÇA AQUI: Injeta a fase atual no frame ---
+                    TrackPhase = currentTrackPhase, 
+                    
                     PositionX = carTransform.position.x,
                     PositionY = carTransform.position.y,
                     PositionZ = carTransform.position.z,

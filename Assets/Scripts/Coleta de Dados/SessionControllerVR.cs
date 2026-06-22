@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class SessionControllerVR : MonoBehaviour
 {
+    [Header("Nome do Dispositivo")]
+    public string sessionPrefix = "Participante_01";
+
     [Header("Configurações do Controle")]
     [Tooltip("Botão do controle esquerdo para iniciar/parar a sessão (Padrão: Botão X)")]
     public OVRInput.Button toggleSessionButton = OVRInput.Button.Three;
@@ -30,7 +33,7 @@ public class SessionControllerVR : MonoBehaviour
         if (!isSessionActive)
         {
             // Gera um ID único baseado no relógio (Ex: Sessao_20260319_143000)
-            string newSessionID = "Sessao_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string newSessionID = sessionPrefix + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
             
             // Dispara o evento que acorda o TelemetryRecorder e o SessionCollector
             SimulationEvents.TriggerSessionStarted(newSessionID);

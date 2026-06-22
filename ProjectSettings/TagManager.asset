@@ -11,6 +11,10 @@ TagManager:
   - AccPedal
   - BrkPedal
   - ScaleTextUI
+  - Car
+  - SpawnPoint
+  - RoadSpawner
+  - Pista
   layers:
   - Default
   - TransparentFX
